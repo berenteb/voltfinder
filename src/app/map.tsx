@@ -1,12 +1,13 @@
 'use client';
 import { Bounds, Map, Marker, Overlay, Point } from 'pigeon-maps';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { ChargerMarker } from '@/components/charger-marker';
 import { ChargerOverlay } from '@/components/charger-overlay';
 import { Toolbar } from '@/components/toolbar';
 import { useChargePoints } from '@/hooks/use-charge-points';
 import { useFilteredMarkers, useMarkersInBound, useProvidersOfMarkers } from '@/lib/charger.utils';
+import { loadFiltersFromLocalStorage, saveFiltersToLocalStorage } from '@/services/storage.service';
 import { FilterItem } from '@/types/filter.types';
 
 export function MapComponent() {
@@ -34,6 +35,16 @@ export function MapComponent() {
   const markers = useFilteredMarkers(markersInBound ?? [], filters);
 
   const providers = useProvidersOfMarkers(chargePoints.data ?? []);
+
+  useEffect(() => {
+    if (filters.length) {
+      saveFiltersToLocalStorage(filters);
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    setFilters(loadFiltersFromLocalStorage());
+  }, []);
 
   return (
     <div className='relative w-full h-full'>
