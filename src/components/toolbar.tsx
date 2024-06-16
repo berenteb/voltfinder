@@ -27,6 +27,9 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
   const handleRemoveFilter = (filter: FilterItem) => {
     setFilters(filters.filter((f) => f.type !== filter.type));
   };
+
+  const filterCount = filters.length;
+
   return (
     <div className='absolute p-5 max-w-full top-0 right-0 left-0 z-10 flex justify-end'>
       <div
@@ -57,7 +60,16 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
       >
         {!isOpen && <b>Szűrés</b>}
         <TbAdjustmentsBolt size={30} />
+        {filterCount > 0 && <FilterCountBadge count={filterCount} />}
       </button>
+    </div>
+  );
+}
+
+function FilterCountBadge({ count }: { count: number }) {
+  return (
+    <div className='absolute -top-2 -right-2 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center'>
+      <b>{count}</b>
     </div>
   );
 }
