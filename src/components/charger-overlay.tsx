@@ -3,23 +3,19 @@ import { TbCopy, TbCopyCheck } from 'react-icons/tb';
 
 import { ChargePointPlug } from '@/components/charge-point-plug';
 import { useChargePointDetails } from '@/hooks/use-charge-point-details';
-import { MobilitiData } from '@/types/mobiliti.types';
+import { ChargerViewModel } from '@/types/charger-view-model.types';
 
 interface ChargerOverlayProps {
-  data: MobilitiData;
+  data: ChargerViewModel;
 }
 
 export function ChargerOverlay({ data }: ChargerOverlayProps) {
   const [copied, setCopied] = useState(false);
-  const chargePointDetails = useChargePointDetails(
-    data.ocpi?.stationId?.countryCode ?? 'HU',
-    data.ocpi?.stationId?.partyId ?? '',
-    data.ocpi?.stationId?.locationId ?? ''
-  );
+  const chargePointDetails = useChargePointDetails(data.countryCode, data.partyId, data.locationId);
 
   const onAddressCopy = () => {
-    if (!navigator.clipboard || !data.address || !data.city) return;
-    navigator.clipboard.writeText(`${data.address}, ${data.city}`);
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(data.fullAddress);
     setCopied(true);
   };
 
@@ -33,7 +29,7 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
   return (
     <div className='bg-white shadow-md rounded-md p-2 w-60 space-y-2'>
       <h2 className='font-bold'>{data.name}</h2>
-      <p className='text-slate-500'>{data.address}</p>
+      <p className='text-slate-500'>{data.fullAddress}</p>
       {data.evses?.map((evse) => (
         <ChargePointPlug
           key={evse.evseId}
@@ -41,8 +37,8 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
           evseDetails={chargePointDetails?.data?.evses?.find((e) => e.evseId === evse.evseId)}
         />
       ))}
-      <p className='italic text-slate-500'>{data.operator?.name ?? data.ocpi?.stationId?.partyId}</p>
-      {data.address && data.city && navigator.clipboard && (
+      <p className='italic text-slate-500'>{data.operatorName}</p>
+      {navigator.clipboard && (
         <button
           onClick={onAddressCopy}
           className='bg-blue-500 p-2 rounded-md flex space-x-1 text-white w-fit items-center'

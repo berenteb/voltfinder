@@ -1,8 +1,37 @@
 import { Bounds } from 'pigeon-maps';
 import { useMemo } from 'react';
 
+import { ChargerViewModel } from '@/types/charger-view-model.types';
 import { FilterItem } from '@/types/filter.types';
-import { MobilitiData } from '@/types/mobiliti.types';
+import { MobilitiData, PlugType } from '@/types/mobiliti.types';
+
+export function mapMobilitiDataToChargerViewModel(data: MobilitiData): ChargerViewModel {
+  const mapped: ChargerViewModel = {
+    id: data.id ?? '',
+    coordinates: [Number(data.latitude), Number(data.longitude)],
+    countryCode: data.ocpi?.stationId?.countryCode ?? '',
+    evses:
+      data.evses?.map((evse) => ({
+        currentType: evse.currentType ?? '',
+        evseId: evse.evseId ?? '',
+        plugType: evse.plugType ?? ('' as PlugType),
+        power: (evse.power ?? 0) / 1000,
+      })) ?? [],
+    fullAddress: `${data.address}, ${data.city}`,
+    locationId: data.ocpi?.stationId?.locationId ?? '',
+    maxPowerKw: Math.max(...(data.evses?.map((e) => e.power ?? 0) ?? []), 0) / 1000,
+    name: data.name ?? '',
+    operatorName: data.operator?.name ?? data.ocpi?.stationId?.partyId ?? '',
+    partyId: data.ocpi?.stationId?.partyId ?? '',
+    plugTypes: [],
+  };
+
+  mapped.evses = mapped.evses.filter((evse) => Boolean(evse.plugType));
+
+  mapped.plugTypes = Array.from(new Set(mapped.evses.map((evse) => evse.plugType)));
+
+  return mapped;
+}
 
 export const StatusMap: Record<string, string> = {
   AVAILABLE: 'Elérhető',
@@ -11,7 +40,7 @@ export const StatusMap: Record<string, string> = {
   OUT_OF_ORDER: 'Nem üzemel',
 };
 
-export function useFilteredMarkers(markers: MobilitiData[], filters: FilterItem[]) {
+export function useFilteredMarkers(markers: ChargerViewModel[], filters: FilterItem[]) {
   return useMemo(() => {
     return filters.reduce((acc, filter) => {
       return Filters[filter.type](filter, acc);
@@ -19,32 +48,31 @@ export function useFilteredMarkers(markers: MobilitiData[], filters: FilterItem[
   }, [markers, filters]);
 }
 
-export function useMarkersInBound(bounds: Bounds | undefined, zoom: number, markers: MobilitiData[]) {
+export function useMarkersInBound(bounds: Bounds | undefined, zoom: number, markers: ChargerViewModel[]) {
   return useMemo(() => {
     if (!bounds) return markers;
     const markersInBounds = markers.filter((chargePoint) => {
-      const lat = Number(chargePoint.latitude);
-      const lng = Number(chargePoint.longitude);
+      const [lat, lng] = chargePoint.coordinates;
       return bounds.sw[0] < lat && lat < bounds.ne[0] && bounds.sw[1] < lng && lng < bounds.ne[1];
     });
     if (zoom > 12) {
       return markersInBounds;
     }
     return markersInBounds.filter((chargePoint) => {
-      return chargePoint.evses?.some((evse) => evse.power && evse.power / 1000 >= 50);
+      return chargePoint.evses?.some((evse) => evse.power && evse.power >= 50);
     });
-  }, [bounds, markers]);
+  }, [bounds, markers, zoom]);
 }
 
-export function useProvidersOfMarkers(markers: MobilitiData[]) {
+export function useProvidersOfMarkers(markers: ChargerViewModel[]) {
   return useMemo(() => {
-    const providers = markers.map((m) => m.operator?.name?.split(' ')[0] ?? '').filter(Boolean);
+    const providers = markers.map((m) => m.operatorName.split(' ')[0] ?? '').filter(Boolean);
     return Array.from(new Set(providers));
   }, [markers]);
 }
 
 interface FilterFunction {
-  (filter: FilterItem, markers: MobilitiData[]): MobilitiData[];
+  (filter: FilterItem, markers: ChargerViewModel[]): ChargerViewModel[];
 }
 
 const Filters: Record<FilterItem['type'], FilterFunction> = {
@@ -53,19 +81,17 @@ const Filters: Record<FilterItem['type'], FilterFunction> = {
     return markers.reduce((acc, marker) => {
       const { evses, ...restMarker } = marker;
       if (!evses) return acc;
-      const evsesFiltered = evses.filter((e) => e.power && e.power / 1000 >= filter.value);
+      const evsesFiltered = evses.filter((e) => e.power && e.power >= filter.value);
       if (evsesFiltered.length) {
         acc.push({ ...restMarker, evses: evsesFiltered });
       }
       return acc;
-    }, [] as MobilitiData[]);
+    }, [] as ChargerViewModel[]);
   },
   provider: (filter, markers) => {
     if (filter.type !== 'provider') return markers;
     return markers.filter((marker) => {
-      return filter.value.some(
-        (v) => marker.operator?.name?.includes(v) || marker.ocpi?.stationId?.partyId?.includes(v)
-      );
+      return filter.value.some((v) => marker.operatorName.includes(v) || marker.partyId.includes(v));
     });
   },
   plug: (filter, markers) => {
@@ -78,6 +104,6 @@ const Filters: Record<FilterItem['type'], FilterFunction> = {
         acc.push({ ...restMarker, evses: evsesFiltered });
       }
       return acc;
-    }, [] as MobilitiData[]);
+    }, [] as ChargerViewModel[]);
   },
 };

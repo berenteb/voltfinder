@@ -24,7 +24,7 @@ export function MapComponent() {
     if (focusedId) {
       const focused = chargePoints.data?.find((c) => c.id === focusedId);
       if (focused) {
-        return [Number(focused.latitude), Number(focused.longitude)];
+        return focused.coordinates;
       }
     }
     return undefined;
@@ -62,20 +62,12 @@ export function MapComponent() {
         provider={osmHotProvider}
       >
         {markers?.map((chargePoint) => (
-          <Marker
-            key={chargePoint.id}
-            width={24}
-            height={24}
-            anchor={[Number(chargePoint.latitude), Number(chargePoint.longitude)]}
-          >
+          <Marker key={chargePoint.id} width={24} height={24} anchor={chargePoint.coordinates}>
             <ChargerMarker data={chargePoint} onClick={() => setFocusedId(chargePoint.id)} />
           </Marker>
         ))}
         {focusedChargePoint && (
-          <Overlay
-            anchor={[Number(focusedChargePoint.latitude), Number(focusedChargePoint.longitude)]}
-            offset={[120, -30]}
-          >
+          <Overlay anchor={focusedChargePoint.coordinates} offset={[120, -30]}>
             <ChargerOverlay data={focusedChargePoint} />
           </Overlay>
         )}

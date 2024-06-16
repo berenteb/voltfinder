@@ -2,10 +2,10 @@ import { PlugIcon } from '@/components/icons/plug-icon';
 import { StatusMap } from '@/lib/charger.utils';
 import { cn } from '@/lib/utils';
 import { ChargePointEvse } from '@/types/charge-point.types';
-import { Evse } from '@/types/mobiliti.types';
+import { EvseViewModel } from '@/types/charger-view-model.types';
 
 interface ChargePointPlugProps {
-  evse: Evse;
+  evse: EvseViewModel;
   evseDetails: ChargePointEvse | undefined;
 }
 
@@ -27,7 +27,7 @@ export function ChargePointPlug({ evse, evseDetails }: ChargePointPlugProps) {
         </div>
       </div>
       <div className='items-end flex flex-col'>
-        <p>{evse.power ? evse.power / 1000 : '?'} kW</p>
+        <p>{evse.power} kW</p>
         <p className='text-slate-500 text-xs'>{evse.currentType}</p>
       </div>
     </div>
