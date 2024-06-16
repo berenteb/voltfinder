@@ -1,0 +1,8 @@
+{
+  "name": "Voltfinder",
+  "short_name": "Voltfinder",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Találd meg a legrelevánsabb elektromos autó töltőket!"
+}
