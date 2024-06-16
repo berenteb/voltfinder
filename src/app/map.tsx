@@ -1,6 +1,5 @@
 'use client';
 import { Bounds, Map, Marker, Overlay, Point } from 'pigeon-maps';
-import { stamenTerrain } from 'pigeon-maps/providers';
 import { useMemo, useState } from 'react';
 
 import { ChargerMarker } from '@/components/charger-marker';

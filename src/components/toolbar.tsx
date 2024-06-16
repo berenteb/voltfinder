@@ -30,8 +30,8 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
   return (
     <div className='absolute p-5 max-w-full top-0 right-0 left-0 z-10 flex justify-end'>
       <div
-        className={cn('bg-slate-100 max-w-full w-fit rounded-lg p-2 space-y-5 origin-top-right transition', {
-          'scale-0 opacity-0': !isOpen,
+        className={cn('bg-slate-100 max-w-full w-fit rounded-lg p-2 space-y-5', {
+          hidden: !isOpen,
         })}
       >
         <PowerFilter
