@@ -42,7 +42,7 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
     <>
       <div className='absolute p-5 max-w-full w-[600px] top-0 right-0 z-10 flex flex-col justify-end'>
         <div
-          className={cn('bg-slate-100 max-w-full w-fit rounded-lg p-2 space-y-5', {
+          className={cn('bg-slate-100 max-w-full w-fit rounded-xl p-2 space-y-5', {
             hidden: !isOpen,
           })}
         >
@@ -66,7 +66,7 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
             <TbTrashX /> Összes szűrő törlése
           </Button>
         </div>
-        <Button onClick={() => setIsOpen((o) => !o)} className='absolute top-5 right-5 rounded-lg'>
+        <Button onClick={() => setIsOpen((o) => !o)} className='absolute top-5 right-5'>
           {!isOpen && <b>Szűrés</b>}
           <TbAdjustmentsBolt size={30} />
           {filterCount > 0 && <FilterCountBadge count={filterCount} />}

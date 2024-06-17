@@ -11,7 +11,10 @@ interface ChargePointPlugProps {
 
 export function ChargePointPlug({ evse, evseDetails }: ChargePointPlugProps) {
   return (
-    <div key={evse.evseId} className='flex items-center justify-between border border-slate-200 p-1 rounded-lg'>
+    <div
+      key={evse.evseId}
+      className='flex items-center justify-between border border-slate-200 p-1 rounded-lg bg-white'
+    >
       <div className='flex items-center space-x-2'>
         <div
           className={cn('items-center flex flex-col bg-slate-500 rounded-md p-2 text-white', {

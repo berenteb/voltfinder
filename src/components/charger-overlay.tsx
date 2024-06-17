@@ -44,7 +44,7 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
   }, [copied]);
 
   return (
-    <div className='bg-white shadow-md rounded-md p-2 w-60 space-y-2'>
+    <div className='shadow-md rounded-xl p-2 w-60 space-y-2 bg-slate-100'>
       <h2 className='font-bold'>{data.name}</h2>
       <p className='text-slate-500'>{data.fullAddress}</p>
       {data.evses?.map((evse) => (
@@ -55,27 +55,29 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
         />
       ))}
       <p className='italic text-slate-500'>{data.operatorName}</p>
-      {navigator.clipboard && (
-        <Button
-          onClick={onAddressCopy}
-          className='bg-blue-500 p-2 text-white w-fit hover:bg-blue-600 active:bg-blue-600 border-blue-100'
-        >
-          {copied ? <TbCopyCheck size={20} /> : <TbCopy size={20} />}
-          {copied ? 'Másolva' : 'Cím másolása'}
-        </Button>
-      )}
-      <Button onClick={onFavoriteClick}>
-        {data.isFavorite ? (
-          <TbHeartFilled
-            size={20}
-            className={cn({
-              'text-red-500': data.isFavorite,
-            })}
-          />
-        ) : (
-          <TbHeart size={20} />
+      <div className='flex space-x-2'>
+        {navigator.clipboard && (
+          <Button
+            onClick={onAddressCopy}
+            className='bg-blue-500 p-2 text-white w-fit hover:bg-blue-600 active:bg-blue-600 border-blue-100 flex-1'
+          >
+            {copied ? <TbCopyCheck size={20} /> : <TbCopy size={20} />}
+            {copied ? 'Másolva' : 'Cím másolása'}
+          </Button>
         )}
-      </Button>
+        <Button onClick={onFavoriteClick}>
+          {data.isFavorite ? (
+            <TbHeartFilled
+              size={20}
+              className={cn({
+                'text-red-500': data.isFavorite,
+              })}
+            />
+          ) : (
+            <TbHeart size={20} />
+          )}
+        </Button>
+      </div>
     </div>
   );
 }
