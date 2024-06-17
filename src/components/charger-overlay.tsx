@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TbCopy, TbCopyCheck } from 'react-icons/tb';
 
+import { Button } from '@/components/button';
 import { ChargePointPlug } from '@/components/charge-point-plug';
 import { useChargePointDetails } from '@/hooks/use-charge-point-details';
 import { ChargerViewModel } from '@/types/charger-view-model.types';
@@ -39,13 +40,13 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
       ))}
       <p className='italic text-slate-500'>{data.operatorName}</p>
       {navigator.clipboard && (
-        <button
+        <Button
           onClick={onAddressCopy}
-          className='bg-blue-500 p-2 rounded-md flex space-x-1 text-white w-fit items-center'
+          className='bg-blue-500 p-2 text-white w-fit hover:bg-blue-600 active:bg-blue-600 border-blue-100'
         >
           {copied ? <TbCopyCheck size={20} /> : <TbCopy size={20} />}
           {copied ? 'Másolva' : 'Cím másolása'}
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { TbAdjustmentsBolt } from 'react-icons/tb';
+import { TbAdjustmentsBolt, TbTrashX } from 'react-icons/tb';
 
+import { Button } from '@/components/button';
 import { PlugFilter } from '@/components/plug-filter';
 import { PowerFilter } from '@/components/power-filter';
 import { ProviderFilter } from '@/components/provider-filter';
@@ -53,15 +54,15 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
           setFilter={handleFilterChange}
           removeFilter={handleRemoveFilter}
         />
+        <Button onClick={() => setFilters([])} className='px-4'>
+          <TbTrashX /> Összes szűrő törlése
+        </Button>
       </div>
-      <button
-        onClick={() => setIsOpen((o) => !o)}
-        className='bg-white shadow-md absolute top-5 right-5 rounded-lg p-2 flex items-center space-x-2'
-      >
+      <Button onClick={() => setIsOpen((o) => !o)} className='absolute top-5 right-5 rounded-lg'>
         {!isOpen && <b>Szűrés</b>}
         <TbAdjustmentsBolt size={30} />
         {filterCount > 0 && <FilterCountBadge count={filterCount} />}
-      </button>
+      </Button>
     </div>
   );
 }

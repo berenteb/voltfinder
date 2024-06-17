@@ -1,4 +1,6 @@
+import { Button } from '@/components/button';
 import { PlugIcon } from '@/components/icons/plug-icon';
+import { PlugTypeLabels } from '@/lib/charger.utils';
 import { cn } from '@/lib/utils';
 import { PlugFilterItem } from '@/types/filter.types';
 import { PlugType } from '@/types/mobiliti.types';
@@ -26,19 +28,16 @@ export function PlugFilter({ filter, setFilter, removeFilter }: PlugFilterProps)
       <p>Csatlakozó</p>
       <div className='flex space-x-2 max-w-full overflow-x-auto p-2'>
         {Object.values(PlugType).map((plugType) => (
-          <button
+          <Button
             key={plugType}
             onClick={() => handleFilter(plugType)}
-            className={cn(
-              'w-28 shrink-0 shadow-md rounded-md bg-white hover:bg-slate-50 active:bg-slate-100 items-center flex flex-col p-2',
-              {
-                'border-2 border-lime-500': filter?.value.includes(plugType),
-              }
-            )}
+            className={cn('w-28 shrink-0 flex-col', {
+              'border-2 border-lime-500': filter?.value.includes(plugType),
+            })}
           >
-            {plugType}
+            {PlugTypeLabels[plugType]}
             <PlugIcon height={50} width={50} type={plugType} />
-          </button>
+          </Button>
         ))}
       </div>
     </div>

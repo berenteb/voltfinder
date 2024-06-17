@@ -47,7 +47,7 @@ export type Evse = {
   evseId?: string;
   uid?: string;
   label?: string;
-  plugType?: PlugType;
+  plugType?: string;
   quantity?: number;
   voltage?: number;
   power?: number;
@@ -60,9 +60,9 @@ export enum CurrentType {
 }
 
 export enum PlugType {
-  CHAdeMO = 'CHAdeMO',
-  Ccs = 'CCS',
-  Type2 = 'Type2',
+  CHAdeMO = 'chademo',
+  Ccs = 'ccs',
+  Type2 = 'type2',
 }
 
 export type Ocpi = {

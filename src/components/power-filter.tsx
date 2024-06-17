@@ -1,3 +1,4 @@
+import { Button } from '@/components/button';
 import { cn } from '@/lib/utils';
 import { PowerFilterItem } from '@/types/filter.types';
 
@@ -20,16 +21,16 @@ export function PowerFilter({ filter, setFilter, removeFilter }: PowerFilterProp
       <p>Teljestmény ettől</p>
       <div className='flex space-x-2 overflow-x-auto p-2 max-w-full'>
         {PowerLevels.map((power) => (
-          <button
+          <Button
             key={power.level}
             onClick={() => handleFilter(power.level)}
-            className={cn('w-20 h-10 shrink-0 shadow-md rounded-md bg-white hover:opacity-80', {
+            className={cn('w-20 h-10 shrink-0 border-2', {
               [power.style]: !filter?.value || filter.value === power.level,
               'opacity-50': filter?.value && filter.value !== power.level,
             })}
           >
             {power.level} kW
-          </button>
+          </Button>
         ))}
       </div>
     </div>
@@ -37,7 +38,7 @@ export function PowerFilter({ filter, setFilter, removeFilter }: PowerFilterProp
 }
 
 const PowerLevels: { level: number; style: string }[] = [
-  { level: 22, style: 'bg-green-500 text-green-100 border-green-200' },
-  { level: 50, style: 'bg-yellow-500 text-yellow-100 border-yellow-200' },
-  { level: 100, style: 'bg-blue-500 text-blue-100 border-blue-200' },
+  { level: 22, style: 'bg-green-500 text-green-100 border-green-100 hover:bg-green-600 active:bg-green-600' },
+  { level: 50, style: 'bg-yellow-500 text-yellow-100 border-yellow-100 hover:bg-yellow-600 active:bg-yellow-600' },
+  { level: 100, style: 'bg-blue-500 text-blue-100 border-blue-100 hover:bg-blue-600 active:bg-blue-600' },
 ];

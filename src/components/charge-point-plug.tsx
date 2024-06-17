@@ -1,5 +1,5 @@
 import { PlugIcon } from '@/components/icons/plug-icon';
-import { StatusMap } from '@/lib/charger.utils';
+import { PlugTypeLabels, StatusMap } from '@/lib/charger.utils';
 import { cn } from '@/lib/utils';
 import { ChargePointEvse } from '@/types/charge-point.types';
 import { EvseViewModel } from '@/types/charger-view-model.types';
@@ -22,7 +22,7 @@ export function ChargePointPlug({ evse, evseDetails }: ChargePointPlugProps) {
           {evse.plugType && <PlugIcon fill='white' height={30} width={30} type={evse.plugType} />}
         </div>
         <div>
-          <p>{evse.plugType}</p>
+          <p>{PlugTypeLabels[evse.plugType]}</p>
           <p className='text-slate-500 text-xs'>{StatusMap[evseDetails?.status ?? ''] ?? evseDetails?.status}</p>
         </div>
       </div>

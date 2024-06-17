@@ -1,3 +1,4 @@
+import { Button } from '@/components/button';
 import { cn } from '@/lib/utils';
 import { ProviderFilterItem } from '@/types/filter.types';
 
@@ -25,15 +26,15 @@ export function ProviderFilter({ filter, setFilter, removeFilter, providers }: P
       <p>Szolgáltató</p>
       <div className='flex space-x-2 max-w-full overflow-x-auto p-2'>
         {providers.map((provider) => (
-          <button
+          <Button
             key={provider}
             onClick={() => handleFilter(provider)}
-            className={cn('w-20 h-10 shrink-0 shadow-md rounded-md bg-white hover:bg-slate-50 active:bg-slate-100', {
+            className={cn('w-20 h-10 shrink-0', {
               'border-2 border-lime-500': filter?.value.includes(provider),
             })}
           >
             {provider}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

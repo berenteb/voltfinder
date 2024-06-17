@@ -14,7 +14,7 @@ export function mapMobilitiDataToChargerViewModel(data: MobilitiData): ChargerVi
       data.evses?.map((evse) => ({
         currentType: evse.currentType ?? '',
         evseId: evse.evseId ?? '',
-        plugType: evse.plugType ?? ('' as PlugType),
+        plugType: (evse.plugType?.toLowerCase() ?? '') as PlugType,
         power: (evse.power ?? 0) / 1000,
       })) ?? [],
     fullAddress: `${data.address}, ${data.city}`,
@@ -38,6 +38,12 @@ export const StatusMap: Record<string, string> = {
   CHARGING: 'Használatban',
   UNKNOWN: 'Ismeretlen',
   OUT_OF_ORDER: 'Nem üzemel',
+};
+
+export const PlugTypeLabels: Record<PlugType, string> = {
+  [PlugType.Ccs]: 'CCS',
+  [PlugType.CHAdeMO]: 'CHAdeMO',
+  [PlugType.Type2]: 'Type 2',
 };
 
 export function useFilteredMarkers(markers: ChargerViewModel[], filters: FilterItem[]) {
