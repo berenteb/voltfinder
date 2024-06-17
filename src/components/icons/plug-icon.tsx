@@ -1,4 +1,5 @@
 import { SVGProps } from 'react';
+import { SiTesla } from 'react-icons/si';
 
 import { PlugType } from '@/types/mobiliti.types';
 
@@ -51,6 +52,8 @@ export function PlugIcon({ type, ...props }: PlugIconProps) {
       return <ChademoIcon {...props} />;
     case PlugType.Type2:
       return <Type2Icon {...props} />;
+    case PlugType.Tesla:
+      return <SiTesla size={props.width} {...props} />;
   }
   return null;
 }

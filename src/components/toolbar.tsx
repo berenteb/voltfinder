@@ -2,11 +2,18 @@ import { useState } from 'react';
 import { TbAdjustmentsBolt, TbTrashX } from 'react-icons/tb';
 
 import { Button } from '@/components/button';
-import { PlugFilter } from '@/components/plug-filter';
-import { PowerFilter } from '@/components/power-filter';
-import { ProviderFilter } from '@/components/provider-filter';
+import { FavoriteFilter } from '@/components/filters/favorite-filter';
+import { PlugFilter } from '@/components/filters/plug-filter';
+import { PowerFilter } from '@/components/filters/power-filter';
+import { ProviderFilter } from '@/components/filters/provider-filter';
 import { cn } from '@/lib/utils';
-import { FilterItem, PlugFilterItem, PowerFilterItem, ProviderFilterItem } from '@/types/filter.types';
+import {
+  FavoriteFilterItem,
+  FilterItem,
+  PlugFilterItem,
+  PowerFilterItem,
+  ProviderFilterItem,
+} from '@/types/filter.types';
 
 interface ToolbarProps {
   filters: FilterItem[];
@@ -32,38 +39,45 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
   const filterCount = filters.length;
 
   return (
-    <div className='absolute p-5 max-w-full top-0 right-0 left-0 z-10 flex justify-end'>
-      <div
-        className={cn('bg-slate-100 max-w-full w-fit rounded-lg p-2 space-y-5', {
-          hidden: !isOpen,
-        })}
-      >
-        <PowerFilter
-          filter={filters.find((f) => f.type === 'power') as PowerFilterItem | undefined}
-          setFilter={handleFilterChange}
-          removeFilter={handleRemoveFilter}
-        />
-        <ProviderFilter
-          providers={providers}
-          filter={filters.find((f) => f.type === 'provider') as ProviderFilterItem | undefined}
-          setFilter={handleFilterChange}
-          removeFilter={handleRemoveFilter}
-        />
-        <PlugFilter
-          filter={filters.find((f) => f.type === 'plug') as PlugFilterItem | undefined}
-          setFilter={handleFilterChange}
-          removeFilter={handleRemoveFilter}
-        />
-        <Button onClick={() => setFilters([])} className='px-4'>
-          <TbTrashX /> Összes szűrő törlése
+    <>
+      <div className='absolute p-5 max-w-full w-[600px] top-0 right-0 z-10 flex flex-col justify-end'>
+        <div
+          className={cn('bg-slate-100 max-w-full w-fit rounded-lg p-2 space-y-5', {
+            hidden: !isOpen,
+          })}
+        >
+          <PowerFilter
+            filter={filters.find((f) => f.type === 'power') as PowerFilterItem | undefined}
+            setFilter={handleFilterChange}
+            removeFilter={handleRemoveFilter}
+          />
+          <ProviderFilter
+            providers={providers}
+            filter={filters.find((f) => f.type === 'provider') as ProviderFilterItem | undefined}
+            setFilter={handleFilterChange}
+            removeFilter={handleRemoveFilter}
+          />
+          <PlugFilter
+            filter={filters.find((f) => f.type === 'plug') as PlugFilterItem | undefined}
+            setFilter={handleFilterChange}
+            removeFilter={handleRemoveFilter}
+          />
+          <Button onClick={() => setFilters([])} className='px-4'>
+            <TbTrashX /> Összes szűrő törlése
+          </Button>
+        </div>
+        <Button onClick={() => setIsOpen((o) => !o)} className='absolute top-5 right-5 rounded-lg'>
+          {!isOpen && <b>Szűrés</b>}
+          <TbAdjustmentsBolt size={30} />
+          {filterCount > 0 && <FilterCountBadge count={filterCount} />}
         </Button>
       </div>
-      <Button onClick={() => setIsOpen((o) => !o)} className='absolute top-5 right-5 rounded-lg'>
-        {!isOpen && <b>Szűrés</b>}
-        <TbAdjustmentsBolt size={30} />
-        {filterCount > 0 && <FilterCountBadge count={filterCount} />}
-      </Button>
-    </div>
+      <FavoriteFilter
+        filter={filters.find((f) => f.type === 'favorite') as FavoriteFilterItem | undefined}
+        setFilter={handleFilterChange}
+        removeFilter={handleRemoveFilter}
+      />
+    </>
   );
 }
 

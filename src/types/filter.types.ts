@@ -13,4 +13,9 @@ export type PlugFilterItem = {
   value: string[];
 };
 
-export type FilterItem = PowerFilterItem | ProviderFilterItem | PlugFilterItem;
+export type FavoriteFilterItem = {
+  type: 'favorite';
+  value: undefined;
+};
+
+export type FilterItem = PowerFilterItem | ProviderFilterItem | PlugFilterItem | FavoriteFilterItem;

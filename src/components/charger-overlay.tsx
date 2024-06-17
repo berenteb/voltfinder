@@ -1,9 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { TbCopy, TbCopyCheck } from 'react-icons/tb';
+import { TbCopy, TbCopyCheck, TbHeart, TbHeartFilled } from 'react-icons/tb';
 
 import { Button } from '@/components/button';
 import { ChargePointPlug } from '@/components/charge-point-plug';
 import { useChargePointDetails } from '@/hooks/use-charge-point-details';
+import { cn } from '@/lib/utils';
+import { markAsFavorite, removeFromFavorites } from '@/services/storage.service';
 import { ChargerViewModel } from '@/types/charger-view-model.types';
 
 interface ChargerOverlayProps {
@@ -11,6 +14,7 @@ interface ChargerOverlayProps {
 }
 
 export function ChargerOverlay({ data }: ChargerOverlayProps) {
+  const queryClient = useQueryClient();
   const [copied, setCopied] = useState(false);
   const chargePointDetails = useChargePointDetails(data.countryCode, data.partyId, data.locationId);
 
@@ -18,6 +22,18 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(data.fullAddress);
     setCopied(true);
+  };
+
+  const onFavoriteClick = () => {
+    if (data.isFavorite) {
+      removeFromFavorites(data.id);
+    } else {
+      markAsFavorite(data.id);
+    }
+
+    queryClient.setQueryData(['chargePoints'], (chargePoints: ChargerViewModel[] | undefined) =>
+      chargePoints?.map((cp) => (cp.id === data.id ? { ...cp, isFavorite: !cp.isFavorite } : cp))
+    );
   };
 
   useEffect(() => {
@@ -48,6 +64,18 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
           {copied ? 'Másolva' : 'Cím másolása'}
         </Button>
       )}
+      <Button onClick={onFavoriteClick}>
+        {data.isFavorite ? (
+          <TbHeartFilled
+            size={20}
+            className={cn({
+              'text-red-500': data.isFavorite,
+            })}
+          />
+        ) : (
+          <TbHeart size={20} />
+        )}
+      </Button>
     </div>
   );
 }

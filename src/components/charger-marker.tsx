@@ -1,4 +1,4 @@
-import { TbBolt } from 'react-icons/tb';
+import { TbBolt, TbHeartFilled } from 'react-icons/tb';
 
 import { cn } from '@/lib/utils';
 import { ChargerViewModel } from '@/types/charger-view-model.types';
@@ -23,6 +23,11 @@ export function ChargerMarker({ data, onClick }: ChargerMarkerProps) {
       >
         <TbBolt size={20} />
       </button>
+      {data.isFavorite && (
+        <div className='absolute top-3 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold'>
+          <TbHeartFilled size={12} />
+        </div>
+      )}
     </div>
   );
 }

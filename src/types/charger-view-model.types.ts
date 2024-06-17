@@ -12,6 +12,7 @@ export type ChargerViewModel = {
   evses: EvseViewModel[];
   plugTypes: PlugType[];
   maxPowerKw: number;
+  isFavorite: boolean;
 };
 
 export type EvseViewModel = {

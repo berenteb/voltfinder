@@ -63,6 +63,7 @@ export enum PlugType {
   CHAdeMO = 'chademo',
   Ccs = 'ccs',
   Type2 = 'type2',
+  Tesla = 'tesla',
 }
 
 export type Ocpi = {

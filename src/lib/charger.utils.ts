@@ -1,11 +1,14 @@
 import { Bounds } from 'pigeon-maps';
 import { useMemo } from 'react';
 
+import { getFavorites } from '@/services/storage.service';
 import { ChargerViewModel } from '@/types/charger-view-model.types';
 import { FilterItem } from '@/types/filter.types';
 import { MobilitiData, PlugType } from '@/types/mobiliti.types';
 
 export function mapMobilitiDataToChargerViewModel(data: MobilitiData): ChargerViewModel {
+  const favorites = getFavorites();
+
   const mapped: ChargerViewModel = {
     id: data.id ?? '',
     coordinates: [Number(data.latitude), Number(data.longitude)],
@@ -24,6 +27,7 @@ export function mapMobilitiDataToChargerViewModel(data: MobilitiData): ChargerVi
     operatorName: data.operator?.name ?? data.ocpi?.stationId?.partyId ?? '',
     partyId: data.ocpi?.stationId?.partyId ?? '',
     plugTypes: [],
+    isFavorite: favorites.has(data.id ?? ''),
   };
 
   mapped.evses = mapped.evses.filter((evse) => Boolean(evse.plugType));
@@ -44,6 +48,7 @@ export const PlugTypeLabels: Record<PlugType, string> = {
   [PlugType.Ccs]: 'CCS',
   [PlugType.CHAdeMO]: 'CHAdeMO',
   [PlugType.Type2]: 'Type 2',
+  [PlugType.Tesla]: 'Tesla',
 };
 
 export function useFilteredMarkers(markers: ChargerViewModel[], filters: FilterItem[]) {
@@ -65,7 +70,7 @@ export function useMarkersInBound(bounds: Bounds | undefined, zoom: number, mark
       return markersInBounds;
     }
     return markersInBounds.filter((chargePoint) => {
-      return chargePoint.evses?.some((evse) => evse.power && evse.power >= 50);
+      return chargePoint.evses?.some((evse) => (evse.power && evse.power >= 50) || chargePoint.isFavorite);
     });
   }, [bounds, markers, zoom]);
 }
@@ -111,5 +116,9 @@ const Filters: Record<FilterItem['type'], FilterFunction> = {
       }
       return acc;
     }, [] as ChargerViewModel[]);
+  },
+  favorite: (filter, markers) => {
+    if (filter.type !== 'favorite') return markers;
+    return markers.filter((marker) => marker.isFavorite);
   },
 };

@@ -29,7 +29,7 @@ export function ProviderFilter({ filter, setFilter, removeFilter, providers }: P
           <Button
             key={provider}
             onClick={() => handleFilter(provider)}
-            className={cn('w-20 h-10 shrink-0', {
+            className={cn('min-w-20 h-10 shrink-0', {
               'border-2 border-lime-500': filter?.value.includes(provider),
             })}
           >
