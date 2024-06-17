@@ -19,7 +19,7 @@ export function PowerFilter({ filter, setFilter, removeFilter }: PowerFilterProp
   return (
     <div>
       <p>Teljestmény ettől</p>
-      <div className='flex space-x-2 overflow-x-auto p-2 max-w-full'>
+      <div className='flex space-x-2 overflow-x-auto p-2 -mx-2'>
         {PowerLevels.map((power) => (
           <Button
             key={power.level}

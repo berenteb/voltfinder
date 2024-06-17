@@ -40,9 +40,9 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
 
   return (
     <>
-      <div className='absolute p-5 max-w-full w-[600px] top-0 right-0 z-10 flex flex-col justify-end'>
+      <div className='absolute p-5 max-w-full w-[600px] top-0 right-0 z-20 flex flex-col justify-end'>
         <div
-          className={cn('bg-slate-100 max-w-full w-fit rounded-xl p-2 space-y-5', {
+          className={cn('bg-slate-100 max-w-full w-fit rounded-xl p-2 space-y-5 shadow-md', {
             hidden: !isOpen,
           })}
         >

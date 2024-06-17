@@ -26,7 +26,7 @@ export function PlugFilter({ filter, setFilter, removeFilter }: PlugFilterProps)
   return (
     <div>
       <p>Csatlakozó</p>
-      <div className='flex space-x-2 max-w-full overflow-x-auto p-2'>
+      <div className='flex space-x-2 overflow-x-auto p-2 -mx-2'>
         {Object.values(PlugType).map((plugType) => (
           <Button
             key={plugType}

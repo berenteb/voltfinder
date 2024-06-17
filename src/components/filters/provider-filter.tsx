@@ -24,7 +24,7 @@ export function ProviderFilter({ filter, setFilter, removeFilter, providers }: P
   return (
     <div>
       <p>Szolgáltató</p>
-      <div className='flex space-x-2 max-w-full overflow-x-auto p-2'>
+      <div className='flex space-x-2 overflow-x-auto p-2 -mx-2'>
         {providers.map((provider) => (
           <Button
             key={provider}
