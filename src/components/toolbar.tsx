@@ -6,6 +6,7 @@ import { FavoriteFilter } from '@/components/filters/favorite-filter';
 import { PlugFilter } from '@/components/filters/plug-filter';
 import { PowerFilter } from '@/components/filters/power-filter';
 import { ProviderFilter } from '@/components/filters/provider-filter';
+import { LocationButton } from '@/components/location-button';
 import { cn } from '@/lib/utils';
 import {
   FavoriteFilterItem,
@@ -72,11 +73,14 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
           {filterCount > 0 && <FilterCountBadge count={filterCount} />}
         </Button>
       </div>
-      <FavoriteFilter
-        filter={filters.find((f) => f.type === 'favorite') as FavoriteFilterItem | undefined}
-        setFilter={handleFilterChange}
-        removeFilter={handleRemoveFilter}
-      />
+      <div className='absolute top-5 left-5 z-10 space-y-2'>
+        <FavoriteFilter
+          filter={filters.find((f) => f.type === 'favorite') as FavoriteFilterItem | undefined}
+          setFilter={handleFilterChange}
+          removeFilter={handleRemoveFilter}
+        />
+        <LocationButton />
+      </div>
     </>
   );
 }

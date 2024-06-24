@@ -15,7 +15,7 @@ export function FavoriteFilter({ filter, setFilter, removeFilter }: FavoriteFilt
     else setFilter({ type: 'favorite', value: undefined });
   };
   return (
-    <Button onClick={() => handleFilter()} className='absolute top-5 left-5 z-10'>
+    <Button onClick={() => handleFilter()}>
       {filter ? <TbHeartFilled size={30} className='text-red-500' /> : <TbHeart size={30} />}
     </Button>
   );

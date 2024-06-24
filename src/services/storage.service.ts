@@ -4,6 +4,10 @@ export function saveFiltersToLocalStorage(filters: FilterItem[]) {
   localStorage.setItem('filters', JSON.stringify(filters));
 }
 
+export function removeFromLocalStorage() {
+  localStorage.removeItem('filters');
+}
+
 export function loadFiltersFromLocalStorage(): FilterItem[] {
   const filters = localStorage.getItem('filters');
   if (filters) {
