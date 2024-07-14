@@ -38,9 +38,10 @@ export function ChargePointConnector({ plug, status, price }: ChargePointPlugPro
       {price && (
         <div className='p-1 rounded-b-lg'>
           {price.elements.map((element, index) => (
+            //eslint-disable-next-line react/no-array-index-key
             <Fragment key={index}>
               {index !== 0 && <hr className='border-slate-300 rounded-full' />}
-              <PriceElement key={index} price={element} />
+              <PriceElement price={element} />
             </Fragment>
           ))}
         </div>
@@ -53,6 +54,7 @@ function PriceElement({ price }: { price: DcsPriceElement }) {
   return (
     <div>
       {price.price_components.map((component, index) => (
+        //eslint-disable-next-line react/no-array-index-key
         <p key={index}>
           {component.price} Ft {getStepSizeLabel(component)}
         </p>

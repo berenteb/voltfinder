@@ -7,7 +7,6 @@ import { ChargerOverlay } from '@/components/charger-overlay';
 import { useLocation } from '@/components/location-context';
 import { Toolbar } from '@/components/toolbar';
 import { UserMarker } from '@/components/user-marker';
-import { useChargePoints } from '@/hooks/use-charge-points';
 import { useChargers } from '@/hooks/use-chargers';
 import { useFilteredMarkers, useMarkersInBound, useProvidersOfMarkers } from '@/lib/charger.utils';
 import {

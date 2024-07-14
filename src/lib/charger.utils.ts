@@ -63,7 +63,6 @@ export const PlugTypeLabels: Record<PlugType, string> = {
   [PlugType.Ccs]: 'CCS',
   [PlugType.CHAdeMO]: 'CHAdeMO',
   [PlugType.Type2]: 'Type 2',
-  [PlugType.Tesla]: 'Tesla',
 };
 
 export const DcsPlugTypeMap: Record<DcsPlugType, PlugType> = {
