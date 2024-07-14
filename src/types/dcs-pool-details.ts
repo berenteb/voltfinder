@@ -47,6 +47,7 @@ export type ChargePoint = {
 };
 
 export type Connector = {
+  id: string;
   plugType: DcsPlugType;
   cableAttached: string;
   phaseType: CurrentType;

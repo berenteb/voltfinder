@@ -4,8 +4,7 @@ import { TbCopy, TbCopyCheck, TbHeart, TbHeartFilled } from 'react-icons/tb';
 
 import { Button } from '@/components/button';
 import { ChargePoint } from '@/components/charge-point';
-import { ChargePointConnector } from '@/components/charge-point-connector';
-import { useChargePointDetails } from '@/hooks/use-charge-point-details';
+import { usePrice } from '@/hooks/use-price';
 import { cn } from '@/lib/utils';
 import { markAsFavorite, removeFromFavorites } from '@/services/storage.service';
 import { ChargerViewModel } from '@/types/charger-view-model.types';
@@ -17,7 +16,7 @@ interface ChargerOverlayProps {
 export function ChargerOverlay({ data }: ChargerOverlayProps) {
   const queryClient = useQueryClient();
   const [copied, setCopied] = useState(false);
-  const chargePointDetails = useChargePointDetails();
+  const price = usePrice(data);
 
   const onAddressCopy = () => {
     if (!navigator.clipboard) return;
@@ -49,7 +48,12 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
       <h2 className='font-bold'>{data.name}</h2>
       <p className='text-slate-500'>{data.fullAddress}</p>
       {data.chargePoints?.map((chargePoint, index) => (
-        <ChargePoint index={index + 1} key={chargePoint.id} data={chargePoint} />
+        <ChargePoint
+          index={index + 1}
+          key={chargePoint.id}
+          data={chargePoint}
+          prices={price.data?.filter((p) => p.price_identifier.charge_point === chargePoint.id) ?? []}
+        />
       ))}
       <p className='italic text-slate-500'>{data.operatorName}</p>
       <div className='flex space-x-2'>

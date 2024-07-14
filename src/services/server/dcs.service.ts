@@ -1,4 +1,5 @@
 import { axiosService } from '@/services/axios.service';
+import { ConnectorViewModel } from '@/types/charger-view-model.types';
 import {
   DcsChargePointItemDto,
   DcsChargePointResponseDto,
@@ -6,8 +7,14 @@ import {
   DcsChargingRequestDto,
   DcsChargingResponseDto,
   DcsPoolItemDto,
-} from '@/types/dcs';
-import { DcsPoolDetails, DcsPoolDetailsRequestDto, DcsPoolDetailsResponseDto } from '@/types/dcs-pool-details';
+} from '@/types/dcs.types';
+import {
+  Connector,
+  DcsPoolDetails,
+  DcsPoolDetailsRequestDto,
+  DcsPoolDetailsResponseDto,
+} from '@/types/dcs-pool-details';
+import { ConnectorPriceRequestDto, DcsPriceRequestDto, DcsPriceResponseDto } from '@/types/dcs-price.types';
 
 type DcsRestApiPath = 'clusters' | 'charge-points' | 'pools';
 
@@ -119,4 +126,20 @@ async function getPoolDetailsByIds(poolIds: string[]) {
   };
 
   return await queryDcs<DcsPoolDetailsResponseDto, DcsPoolDetailsRequestDto>('pools', requestBody);
+}
+
+export async function getPricesForConnectors(connectors: ConnectorPriceRequestDto[]) {
+  const requestBody: DcsPriceRequestDto = connectors;
+
+  const response = await axiosService.post<DcsPriceResponseDto>(
+    'https://bmw-public-charging.com/api/map/v1/hu/tariffs/BMW_CHARGING_AVERAGE/prices',
+    requestBody,
+    {
+      headers: {
+        'content-type': 'application/json',
+      },
+    }
+  );
+
+  return response.data;
 }
