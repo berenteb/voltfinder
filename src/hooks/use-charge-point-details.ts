@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
-import { getChargePointDetails } from '@/services/charge-point.service';
+import { getDcsChargePointDetails } from '@/services/charge-point.service';
+import { DcsChargePointItemDto } from '@/types/dcs';
 
-export function useChargePointDetails(country: string, provider: string, id: string) {
-  return useQuery({
-    queryKey: ['chargePointDetails', country, provider, id],
-    queryFn: () => getChargePointDetails(country, provider, id),
-    refetchInterval: 60000,
+export function useChargePointDetails(): UseQueryResult<DcsChargePointItemDto[]> {
+  return useQuery<DcsChargePointItemDto[]>({
+    queryKey: ['chargePointDetails'],
+    queryFn: () => getDcsChargePointDetails(),
+    // refetchInterval: 60000,
+    initialData: [],
   });
 }

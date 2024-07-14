@@ -1,18 +1,16 @@
-import { mapMobilitiDataToChargerViewModel } from '@/lib/charger.utils';
+import { mapDcsDataToChargerViewModel } from '@/lib/charger.utils';
 import { axiosService } from '@/services/axios.service';
-import { ChargePoint } from '@/types/charge-point.types';
 import { ChargerViewModel } from '@/types/charger-view-model.types';
-import { MobilitiData } from '@/types/mobiliti.types';
+import { DcsChargePointItemDto } from '@/types/dcs';
+import { DcsPoolDetails } from '@/types/dcs-pool-details';
 
-export const getMobilitiChargePoints = async (): Promise<ChargerViewModel[]> => {
-  const response = await axiosService.get<MobilitiData[]>('/api/charge-points');
+export const getDcsChargePoints = async (): Promise<ChargerViewModel[]> => {
+  const response = await axiosService.get<DcsPoolDetails[]>('/api/dcs/charge-points');
   if (!Array.isArray(response.data)) return [];
-  return response.data.map((data) => mapMobilitiDataToChargerViewModel(data));
+  return response.data.map((data) => mapDcsDataToChargerViewModel(data));
 };
 
-export const getChargePointDetails = async (country: string, provider: string, id: string) => {
-  const response = await axiosService.get<ChargePoint>(
-    `/api/charge-point-details/${country}/${provider}/${id}?reduced=true`
-  );
+export const getDcsChargePointDetails = async () => {
+  const response = await axiosService.get<DcsChargePointItemDto[]>('/api/dcs/charge-point-details');
   return response.data;
 };

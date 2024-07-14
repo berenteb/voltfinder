@@ -8,6 +8,7 @@ import { useLocation } from '@/components/location-context';
 import { Toolbar } from '@/components/toolbar';
 import { UserMarker } from '@/components/user-marker';
 import { useChargePoints } from '@/hooks/use-charge-points';
+import { useChargers } from '@/hooks/use-chargers';
 import { useFilteredMarkers, useMarkersInBound, useProvidersOfMarkers } from '@/lib/charger.utils';
 import {
   loadFiltersFromLocalStorage,
@@ -23,28 +24,28 @@ export function MapComponent() {
 
   const [bounds, setBounds] = useState<Bounds>();
   const [zoom, setZoom] = useState<number>(11);
-  const chargePoints = useChargePoints();
+  const { chargers } = useChargers();
 
-  const markersInBound = useMarkersInBound(bounds, zoom, chargePoints.data ?? []);
+  const markersInBound = useMarkersInBound(bounds, zoom, chargers ?? []);
 
   const center = useMemo<Point | undefined>(() => {
     if (isFollowed && location) {
       return location;
     }
     if (focusedId) {
-      const focused = chargePoints.data?.find((c) => c.id === focusedId);
+      const focused = chargers.find((c) => c.id === focusedId);
       if (focused) {
         return focused.coordinates;
       }
     }
     return undefined;
-  }, [focusedId, chargePoints.data, location, isFollowed]);
+  }, [focusedId, chargers, location, isFollowed]);
 
-  const focusedChargePoint = chargePoints.data?.find((c) => c.id === focusedId);
+  const focusedChargePoint = chargers.find((c) => c.id === focusedId);
 
   const markers = useFilteredMarkers(markersInBound ?? [], filters);
 
-  const providers = useProvidersOfMarkers(chargePoints.data ?? []);
+  const providers = useProvidersOfMarkers(chargers);
 
   useEffect(() => {
     if (filters.length) {
@@ -79,15 +80,15 @@ export function MapComponent() {
             <ChargerMarker data={chargePoint} onClick={() => setFocusedId(chargePoint.id)} />
           </Marker>
         ))}
-        {focusedChargePoint && (
-          <Overlay anchor={focusedChargePoint.coordinates} offset={[120, -30]}>
-            <ChargerOverlay data={focusedChargePoint} />
-          </Overlay>
-        )}
         {location && (
           <Marker anchor={location}>
             <UserMarker />
           </Marker>
+        )}
+        {focusedChargePoint && (
+          <Overlay anchor={focusedChargePoint.coordinates} offset={[120, -30]}>
+            <ChargerOverlay data={focusedChargePoint} />
+          </Overlay>
         )}
       </Map>
     </div>

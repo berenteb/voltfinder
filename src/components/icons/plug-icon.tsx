@@ -1,7 +1,6 @@
 import { SVGProps } from 'react';
-import { SiTesla } from 'react-icons/si';
 
-import { PlugType } from '@/types/mobiliti.types';
+import { PlugType } from '@/types/common.types';
 
 function CCSIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -52,8 +51,6 @@ export function PlugIcon({ type, ...props }: PlugIconProps) {
       return <ChademoIcon {...props} />;
     case PlugType.Type2:
       return <Type2Icon {...props} />;
-    case PlugType.Tesla:
-      return <SiTesla size={props.width} {...props} />;
   }
   return null;
 }

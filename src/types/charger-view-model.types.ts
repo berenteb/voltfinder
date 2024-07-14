@@ -1,4 +1,4 @@
-import { PlugType } from '@/types/mobiliti.types';
+import { PlugType } from '@/types/common.types';
 
 export type ChargerViewModel = {
   id: string;
@@ -9,15 +9,22 @@ export type ChargerViewModel = {
   name: string;
   coordinates: [number, number];
   operatorName: string;
-  evses: EvseViewModel[];
+  chargePoints: ChargePointViewModel[];
   plugTypes: PlugType[];
   maxPowerKw: number;
   isFavorite: boolean;
 };
 
-export type EvseViewModel = {
-  evseId: string;
-  power: number;
+export type ChargePointViewModel = {
+  id: string;
+  status: string;
+  maxPowerKw: number;
+  plugTypes: PlugType[];
+  connectors: ConnectorViewModel[];
+};
+
+export type ConnectorViewModel = {
   plugType: PlugType;
+  power: number;
   currentType: string;
 };

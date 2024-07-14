@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { TbCopy, TbCopyCheck, TbHeart, TbHeartFilled } from 'react-icons/tb';
 
 import { Button } from '@/components/button';
-import { ChargePointPlug } from '@/components/charge-point-plug';
+import { ChargePoint } from '@/components/charge-point';
+import { ChargePointConnector } from '@/components/charge-point-connector';
 import { useChargePointDetails } from '@/hooks/use-charge-point-details';
 import { cn } from '@/lib/utils';
 import { markAsFavorite, removeFromFavorites } from '@/services/storage.service';
@@ -16,7 +17,7 @@ interface ChargerOverlayProps {
 export function ChargerOverlay({ data }: ChargerOverlayProps) {
   const queryClient = useQueryClient();
   const [copied, setCopied] = useState(false);
-  const chargePointDetails = useChargePointDetails(data.countryCode, data.partyId, data.locationId);
+  const chargePointDetails = useChargePointDetails();
 
   const onAddressCopy = () => {
     if (!navigator.clipboard) return;
@@ -47,12 +48,8 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
     <div className='shadow-md rounded-xl p-2 w-60 space-y-2 bg-slate-100'>
       <h2 className='font-bold'>{data.name}</h2>
       <p className='text-slate-500'>{data.fullAddress}</p>
-      {data.evses?.map((evse) => (
-        <ChargePointPlug
-          key={evse.evseId}
-          evse={evse}
-          evseDetails={chargePointDetails?.data?.evses?.find((e) => e.evseId === evse.evseId)}
-        />
+      {data.chargePoints?.map((chargePoint, index) => (
+        <ChargePoint index={index + 1} key={chargePoint.id} data={chargePoint} />
       ))}
       <p className='italic text-slate-500'>{data.operatorName}</p>
       <div className='flex space-x-2'>
