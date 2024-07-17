@@ -48,8 +48,8 @@ export function MapComponent() {
 
   const onSetFilters = (newFilters: FilterItem[]) => {
     setFilters(newFilters);
-    if (filters.length) {
-      saveFiltersToLocalStorage(filters);
+    if (newFilters.length) {
+      saveFiltersToLocalStorage(newFilters);
     } else {
       removeFromLocalStorage();
     }
