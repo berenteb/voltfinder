@@ -1,3 +1,5 @@
+'use client';
+
 import { FilterItem } from '@/types/filter.types';
 
 export function saveFiltersToLocalStorage(filters: FilterItem[]) {
@@ -12,7 +14,8 @@ export function loadFiltersFromLocalStorage(): FilterItem[] {
   const filters = localStorage.getItem('filters');
   if (filters) {
     try {
-      return JSON.parse(filters);
+      const parsed = JSON.parse(filters);
+      return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
       console.error('Error parsing filters from local storage', e);
     }

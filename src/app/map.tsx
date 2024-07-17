@@ -46,13 +46,14 @@ export function MapComponent() {
 
   const providers = useProvidersOfMarkers(chargers);
 
-  useEffect(() => {
+  const onSetFilters = (newFilters: FilterItem[]) => {
+    setFilters(newFilters);
     if (filters.length) {
       saveFiltersToLocalStorage(filters);
     } else {
       removeFromLocalStorage();
     }
-  }, [filters]);
+  };
 
   useEffect(() => {
     setFilters(loadFiltersFromLocalStorage());
@@ -60,7 +61,7 @@ export function MapComponent() {
 
   return (
     <div className='relative w-full h-full'>
-      <Toolbar filters={filters} setFilters={setFilters} providers={providers} />
+      <Toolbar filters={filters} setFilters={onSetFilters} providers={providers} />
       <Map
         onClick={() => setFocusedId(undefined)}
         onBoundsChanged={(changed) => {
