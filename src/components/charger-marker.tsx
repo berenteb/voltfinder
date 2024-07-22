@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { TbBolt, TbHeartFilled } from 'react-icons/tb';
 
 import { cn } from '@/lib/utils';
@@ -9,10 +10,10 @@ interface ChargerMarkerProps {
 }
 
 export function ChargerMarker({ data, onClick }: ChargerMarkerProps) {
+  const status = useMemo(() => getChargerStatus(data), [data]);
   return (
-    <div className='relative pointer-events-auto z-0'>
-      <button
-        onClick={onClick}
+    <button onClick={onClick} className='relative pointer-events-auto z-0'>
+      <div
         className={cn(
           'translate-y-1/2 rounded-full w-8 h-8 flex items-center justify-center text-green-200 text-sm font-bold bg-green-500 border-2 border-green-200 shadow-md',
           {
@@ -22,12 +23,51 @@ export function ChargerMarker({ data, onClick }: ChargerMarkerProps) {
         )}
       >
         <TbBolt size={20} />
-      </button>
+      </div>
       {data.isFavorite && (
-        <div className='absolute top-3 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold'>
+        <div className='absolute top-3 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold'>
           <TbHeartFilled size={12} />
         </div>
       )}
-    </div>
+      <div
+        className={cn(
+          'absolute top-3 -left-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold border-2 border-white',
+          {
+            'bg-green-500': status === ChargerStatus.Free,
+            'bg-yellow-500': status === ChargerStatus.Occupied,
+            'bg-red-500': status === ChargerStatus.Full,
+            'bg-gray-500': status === ChargerStatus.Unknown,
+          }
+        )}
+      >
+        {data.chargePoints.length ?? '?'}
+      </div>
+    </button>
   );
+}
+
+enum ChargerStatus {
+  Free = 'free',
+  Occupied = 'occupied',
+  Full = 'full',
+  Unknown = 'unknown',
+}
+
+function getChargerStatus(charger: ChargerViewModel): ChargerStatus {
+  const chargePoints = charger.chargePoints.filter((cp) => cp.status !== 'UNKNOWN');
+  if (chargePoints.length === 0) return ChargerStatus.Unknown;
+
+  if (chargePoints.every((cp) => cp.status === 'AVAILABLE')) {
+    return ChargerStatus.Free;
+  }
+
+  if (chargePoints.every((cp) => cp.status === 'CHARGING')) {
+    return ChargerStatus.Full;
+  }
+
+  if (chargePoints.some((cp) => cp.status === 'CHARGING')) {
+    return ChargerStatus.Occupied;
+  }
+
+  return ChargerStatus.Unknown;
 }
