@@ -36,7 +36,7 @@ export function MapComponent() {
       }
     }
     return undefined;
-  }, [focusedId, chargers, location]);
+  }, [focusedId, chargers]);
 
   const focusedChargePoint = chargers.find((c) => c.id === focusedId);
 
