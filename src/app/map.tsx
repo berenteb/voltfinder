@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChargerMarker } from '@/components/charger-marker';
 import { ChargerOverlay } from '@/components/charger-overlay';
 import { useLocation } from '@/components/location-context';
+import { PwaPrompt } from '@/components/pwa-prompt';
 import { Toolbar } from '@/components/toolbar';
 import { UserMarker } from '@/components/user-marker';
 import { useChargers } from '@/hooks/use-chargers';
@@ -103,6 +104,7 @@ export function MapComponent() {
           </Marker>
         )}
       </Map>
+      <PwaPrompt />
     </div>
   );
 }

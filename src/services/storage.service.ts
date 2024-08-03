@@ -46,3 +46,11 @@ export function removeFromFavorites(id: string) {
   favorites.delete(id);
   localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
 }
+
+export function setPromptDismissed() {
+  localStorage.setItem('promptDismissed', 'true');
+}
+
+export function isPromptDismissed() {
+  return localStorage.getItem('promptDismissed') === 'true';
+}
