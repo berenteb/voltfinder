@@ -11,14 +11,14 @@ export function PwaPrompt() {
 
   useEffect(() => {
     let displayMode = 'browser tab';
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    if (typeof window !== 'undefined' && window.matchMedia('(display-mode: standalone)').matches) {
       displayMode = 'standalone';
     }
 
     if (displayMode === 'browser tab' && !isPromptDismissed()) {
       setPromptOpen(true);
     }
-  }, []);
+  }, [window]);
 
   const onDismiss = () => {
     setPromptDismissed();
@@ -26,8 +26,8 @@ export function PwaPrompt() {
   };
 
   const platform = useMemo(
-    () => (window ? Bowser.parse(window.navigator.userAgent).platform.type : undefined),
-    [window]
+    () => (typeof window === 'undefined' ? undefined : Bowser.parse(window.navigator.userAgent).platform.type),
+    []
   );
 
   if (!promptOpen || !platform) {
