@@ -15,7 +15,7 @@ interface ChargePointPlugProps {
 export function ChargePointConnector({ plug, status, price }: ChargePointPlugProps) {
   return (
     <div className='bg-slate-200 rounded-lg'>
-      <div className='flex items-center justify-between border-2 border-slate-200 p-1 rounded-lg bg-white'>
+      <div className='flex items-center justify-between border-2 border-slate-200 p-1 rounded-lg bg-white w-60'>
         <div className='flex items-center space-x-2'>
           <div
             className={cn('items-center flex flex-col bg-slate-500 rounded-md p-2 text-white', {

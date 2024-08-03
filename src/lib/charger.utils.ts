@@ -12,8 +12,11 @@ export function mapDcsDataArrayToChargerViewModelArray(data: DcsPoolDetails[]): 
     const charger = mapDcsDataToChargerViewModel(d);
     const similarCharger = acc.find((c) => isChargerSimilar(c, charger));
     if (similarCharger) {
-      similarCharger.chargePoints = mergeChargePoints(similarCharger.chargePoints, charger.chargePoints);
+      similarCharger.chargePoints = sortChargePointsByPower(
+        mergeChargePoints(similarCharger.chargePoints, charger.chargePoints)
+      );
     } else {
+      charger.chargePoints = sortChargePointsByPower(charger.chargePoints);
       acc.push(charger);
     }
     return acc;
@@ -25,6 +28,12 @@ function isChargerSimilar(charger1: ChargerViewModel, charger2: ChargerViewModel
     charger1.coordinates[0] === charger2.coordinates[0] &&
     charger1.coordinates[1] === charger2.coordinates[1] &&
     charger1.name === charger2.name
+  );
+}
+
+function sortChargePointsByPower(chargePoints: ChargePointViewModel[]) {
+  return chargePoints.sort((a, b) =>
+    a.maxPowerKw === b.maxPowerKw ? a.evseId.localeCompare(b.evseId) : b.maxPowerKw - a.maxPowerKw
   );
 }
 
@@ -63,6 +72,7 @@ export function mapDcsDataToChargerViewModel(data: DcsPoolDetails): ChargerViewM
         maxPowerKw: Math.max(...connectors.map((c) => c.power), 0),
         plugTypes: connectors.map((c) => c.plugType),
         connectors: connectors,
+        evseId: cp.incomingCpId ?? '',
       });
     });
   });

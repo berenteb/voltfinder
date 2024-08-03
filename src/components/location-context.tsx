@@ -4,8 +4,6 @@ type LocationContextType =
   | {
       location: [number, number] | undefined;
       setLocation: (location: [number, number]) => void;
-      isFollowed: boolean;
-      setIsFollowed: (isFollowed: boolean) => void;
     }
   | undefined;
 
@@ -13,7 +11,6 @@ const LocationContext = createContext<LocationContextType>(undefined);
 
 export function LocationProvider({ children }: PropsWithChildren) {
   const [location, setLocation] = useState<[number, number]>();
-  const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
     const handler = navigator.geolocation.watchPosition((position) => {
@@ -24,11 +21,7 @@ export function LocationProvider({ children }: PropsWithChildren) {
     };
   }, []);
 
-  return (
-    <LocationContext.Provider value={{ location, setLocation, isFollowed, setIsFollowed }}>
-      {children}
-    </LocationContext.Provider>
-  );
+  return <LocationContext.Provider value={{ location, setLocation }}>{children}</LocationContext.Provider>;
 }
 
 export function useLocation() {

@@ -17,6 +17,7 @@ export type ChargerViewModel = {
 
 export type ChargePointViewModel = {
   id: string;
+  evseId: string;
   status: string;
   maxPowerKw: number;
   plugTypes: PlugType[];

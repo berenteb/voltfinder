@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+html{
+    @apply overflow-hidden;
+}
+
 body {
   @apply bg-slate-100 h-screen w-screen;
+}
+
+.pulse-dot {
+    animation: animatePulseDot 1s infinite;
+}
+
+@keyframes animatePulseDot {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
 }

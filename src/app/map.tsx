@@ -1,6 +1,6 @@
 'use client';
-import { Bounds, Map, Marker, Overlay, Point } from 'pigeon-maps';
-import { useEffect, useMemo, useState } from 'react';
+import { Bounds, Map, Marker, Point } from 'pigeon-maps';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { ChargerMarker } from '@/components/charger-marker';
 import { ChargerOverlay } from '@/components/charger-overlay';
@@ -17,9 +17,10 @@ import {
 import { FilterItem } from '@/types/filter.types';
 
 export function MapComponent() {
+  const ref = useRef<Map>(null);
   const [filters, setFilters] = useState<FilterItem[]>([]);
   const [focusedId, setFocusedId] = useState<string>();
-  const { location, isFollowed, setIsFollowed } = useLocation();
+  const { location } = useLocation();
 
   const [bounds, setBounds] = useState<Bounds>();
   const [zoom, setZoom] = useState<number>(11);
@@ -28,9 +29,6 @@ export function MapComponent() {
   const markersInBound = useMarkersInBound(bounds, zoom, chargers ?? []);
 
   const center = useMemo<Point | undefined>(() => {
-    if (isFollowed && location) {
-      return location;
-    }
     if (focusedId) {
       const focused = chargers.find((c) => c.id === focusedId);
       if (focused) {
@@ -38,7 +36,7 @@ export function MapComponent() {
       }
     }
     return undefined;
-  }, [focusedId, chargers, location, isFollowed]);
+  }, [focusedId, chargers, location]);
 
   const focusedChargePoint = chargers.find((c) => c.id === focusedId);
 
@@ -59,36 +57,50 @@ export function MapComponent() {
     setFilters(loadFiltersFromLocalStorage());
   }, []);
 
+  const onCenterCharger = () => {
+    if (ref.current && focusedChargePoint?.coordinates) {
+      ref.current.setCenterZoomTarget(focusedChargePoint.coordinates, zoom < 15 ? 15 : zoom);
+    }
+  };
+
+  const onCenterUser = location
+    ? () => {
+        if (ref.current && location) {
+          ref.current.setCenterZoomTarget(location, zoom);
+        }
+      }
+    : undefined;
+
   return (
     <div className='relative w-full h-full'>
-      <Toolbar filters={filters} setFilters={onSetFilters} providers={providers} />
+      <Toolbar onLocationClick={onCenterUser} filters={filters} setFilters={onSetFilters} providers={providers} />
+      {focusedChargePoint && <ChargerOverlay onCenterClick={onCenterCharger} data={focusedChargePoint} />}
       <Map
         onClick={() => setFocusedId(undefined)}
         onBoundsChanged={(changed) => {
           setBounds(changed.bounds);
           setZoom(changed.zoom);
-          setIsFollowed(false);
         }}
         defaultCenter={[47.498333, 19.040833]}
         defaultZoom={11}
         zoomSnap={false}
         center={center}
         provider={osmHotProvider}
+        ref={ref}
       >
         {markers?.map((chargePoint) => (
           <Marker key={chargePoint.id} width={24} height={24} anchor={chargePoint.coordinates}>
-            <ChargerMarker data={chargePoint} onClick={() => setFocusedId(chargePoint.id)} />
+            <ChargerMarker
+              data={chargePoint}
+              onClick={() => setFocusedId(chargePoint.id)}
+              focused={focusedId === chargePoint.id}
+            />
           </Marker>
         ))}
         {location && (
           <Marker anchor={location}>
             <UserMarker />
           </Marker>
-        )}
-        {focusedChargePoint && (
-          <Overlay anchor={focusedChargePoint.coordinates} offset={[120, -30]}>
-            <ChargerOverlay data={focusedChargePoint} />
-          </Overlay>
         )}
       </Map>
     </div>

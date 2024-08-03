@@ -7,12 +7,22 @@ import { ChargerViewModel } from '@/types/charger-view-model.types';
 interface ChargerMarkerProps {
   data: ChargerViewModel;
   onClick: () => void;
+  focused?: boolean;
 }
 
-export function ChargerMarker({ data, onClick }: ChargerMarkerProps) {
+export function ChargerMarker({ data, onClick, focused }: ChargerMarkerProps) {
   const status = useMemo(() => getChargerStatus(data), [data]);
   return (
     <button onClick={onClick} className='relative pointer-events-auto z-0'>
+      {focused && (
+        <div
+          className={cn('absolute top-1/2 w-full h-full rounded-full pulse-dot bg-green-500', {
+            'bg-yellow-500': data.maxPowerKw >= 50,
+            'bg-blue-500': data.maxPowerKw >= 100,
+          })}
+        />
+      )}
+
       <div
         className={cn(
           'translate-y-1/2 rounded-full w-8 h-8 flex items-center justify-center text-green-200 text-sm font-bold bg-green-500 border-2 border-green-200 shadow-md',

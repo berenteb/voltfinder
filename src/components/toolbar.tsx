@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TbAdjustmentsBolt, TbTrashX } from 'react-icons/tb';
+import { TbAdjustmentsBolt, TbLocation, TbTrashX } from 'react-icons/tb';
 
 import { Button } from '@/components/button';
 import { FavoriteFilter } from '@/components/filters/favorite-filter';
@@ -7,7 +7,6 @@ import { PlugFilter } from '@/components/filters/plug-filter';
 import { PowerFilter } from '@/components/filters/power-filter';
 import { ProviderFilter } from '@/components/filters/provider-filter';
 import { LoadingIndicator } from '@/components/loading-indicator';
-import { LocationButton } from '@/components/location-button';
 import { cn } from '@/lib/utils';
 import {
   FavoriteFilterItem,
@@ -21,9 +20,10 @@ interface ToolbarProps {
   filters: FilterItem[];
   setFilters: (filters: FilterItem[]) => void;
   providers: string[];
+  onLocationClick?: () => void;
 }
 
-export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
+export function Toolbar({ filters, setFilters, providers, onLocationClick }: ToolbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleFilterChange = (filter: FilterItem) => {
@@ -81,7 +81,11 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
           setFilter={handleFilterChange}
           removeFilter={handleRemoveFilter}
         />
-        <LocationButton />
+        {onLocationClick && (
+          <Button onClick={onLocationClick}>
+            <TbLocation size={30} />
+          </Button>
+        )}
       </div>
     </>
   );
