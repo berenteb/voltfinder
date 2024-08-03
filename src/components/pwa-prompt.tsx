@@ -1,3 +1,4 @@
+'use client';
 import Bowser from 'bowser';
 import { useEffect, useMemo, useState } from 'react';
 import { TbShare2, TbSquarePlus } from 'react-icons/tb';
@@ -24,9 +25,12 @@ export function PwaPrompt() {
     setPromptOpen(false);
   };
 
-  const platform = useMemo(() => Bowser.parse(window.navigator.userAgent).platform.type, []);
+  const platform = useMemo(
+    () => (window ? Bowser.parse(window.navigator.userAgent).platform.type : undefined),
+    [window]
+  );
 
-  if (!promptOpen) {
+  if (!promptOpen || !platform) {
     return null;
   }
 
