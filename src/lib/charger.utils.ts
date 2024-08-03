@@ -11,7 +11,7 @@ export function mapDcsDataToChargerViewModel(data: DcsPoolDetails): ChargerViewM
   const favorites = getFavorites();
 
   const location = data.poolLocations[0];
-  const name = location.locationNames?.[0].name ?? '';
+  const name = location.poolLocationNames?.[0].name ?? '';
 
   const chargePoints: ChargePointViewModel[] = [];
 

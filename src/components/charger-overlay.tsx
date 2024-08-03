@@ -46,7 +46,7 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
   return (
     <div className='shadow-md rounded-xl p-2 w-60 space-y-2 bg-slate-100'>
       <h2 className='font-bold'>{data.name}</h2>
-      <p className='text-slate-500'>{data.fullAddress}</p>
+      <p className='text-slate-500'>{data.operatorName}</p>
       {data.chargePoints?.map((chargePoint, index) => (
         <ChargePoint
           index={index + 1}
@@ -55,7 +55,7 @@ export function ChargerOverlay({ data }: ChargerOverlayProps) {
           prices={price.data?.filter((p) => p.price_identifier.charge_point === chargePoint.id) ?? []}
         />
       ))}
-      <p className='italic text-slate-500'>{data.operatorName}</p>
+      <p className='italic text-slate-500'>{data.fullAddress}</p>
       <div className='flex space-x-2'>
         {navigator.clipboard && (
           <Button
