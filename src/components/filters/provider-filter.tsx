@@ -1,3 +1,5 @@
+import { TbCircle, TbCircleFilled } from 'react-icons/tb';
+
 import { Button } from '@/components/button';
 import { cn } from '@/lib/utils';
 import { ProviderFilterItem } from '@/types/filter.types';
@@ -21,9 +23,31 @@ export function ProviderFilter({ filter, setFilter, removeFilter, providers }: P
       setFilter({ type: 'provider', value: [...(filter?.value ?? []), provider] });
     }
   };
+
+  const onAllClick = () => {
+    setFilter({ type: 'provider', value: providers });
+  };
+
+  const onNoneClick = () => {
+    removeFilter({ type: 'provider', value: [] });
+  };
+
   return (
     <div>
-      <p>Szolgáltató</p>
+      <div className='flex gap-4 items-center flex-wrap'>
+        <p>Szolgáltató</p>
+        <div className='border-l-2 border-l-slate-300 w-0 h-4 rounded-full' />
+        <div className='flex items-center gap-2'>
+          <Button onClick={onAllClick} className='bg-transparent border-slate-300 shadow-none py-0'>
+            <TbCircleFilled />
+            Mind be
+          </Button>
+          <Button onClick={onNoneClick} className='bg-transparent border-slate-300 shadow-none py-0'>
+            <TbCircle />
+            Mind ki
+          </Button>
+        </div>
+      </div>
       <div className='flex space-x-2 overflow-x-auto p-2 -mx-2'>
         {providers.map((provider) => (
           <Button
