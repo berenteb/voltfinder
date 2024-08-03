@@ -7,6 +7,40 @@ import { CurrentType, PlugType } from '@/types/common.types';
 import { DcsPlugType, DcsPoolDetails } from '@/types/dcs-pool-details';
 import { FilterItem } from '@/types/filter.types';
 
+export function mapDcsDataArrayToChargerViewModelArray(data: DcsPoolDetails[]): ChargerViewModel[] {
+  return data.reduce<ChargerViewModel[]>((acc, d) => {
+    const charger = mapDcsDataToChargerViewModel(d);
+    const similarCharger = acc.find((c) => isChargerSimilar(c, charger));
+    if (similarCharger) {
+      similarCharger.chargePoints = mergeChargePoints(similarCharger.chargePoints, charger.chargePoints);
+    } else {
+      acc.push(charger);
+    }
+    return acc;
+  }, []);
+}
+
+function isChargerSimilar(charger1: ChargerViewModel, charger2: ChargerViewModel) {
+  return (
+    charger1.coordinates[0] === charger2.coordinates[0] &&
+    charger1.coordinates[1] === charger2.coordinates[1] &&
+    charger1.name === charger2.name
+  );
+}
+
+function mergeChargePoints(charger1: ChargePointViewModel[], charger2: ChargePointViewModel[]) {
+  const base = [...charger1];
+  charger2.forEach((cp) => {
+    const similar = base.find((b) => b.id === cp.id);
+    if (similar) {
+      similar.connectors = [...similar.connectors, ...cp.connectors];
+    } else {
+      base.push(cp);
+    }
+  });
+  return base;
+}
+
 export function mapDcsDataToChargerViewModel(data: DcsPoolDetails): ChargerViewModel {
   const favorites = getFavorites();
 
