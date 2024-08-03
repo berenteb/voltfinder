@@ -7,7 +7,7 @@ export function useChargePointDetails(): UseQueryResult<DcsChargePointItemDto[]>
   return useQuery<DcsChargePointItemDto[]>({
     queryKey: ['chargePointDetails'],
     queryFn: () => getDcsChargePointDetails(),
-    // refetchInterval: 60000,
+    refetchInterval: 30000,
     initialData: [],
   });
 }

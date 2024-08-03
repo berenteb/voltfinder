@@ -10,7 +10,7 @@ interface ChargePointProps {
 
 export function ChargePoint({ data, index, prices }: ChargePointProps) {
   return (
-    <div>
+    <div className='space-y-1'>
       <p>{index}. állás</p>
       {data.connectors.map((connector) => (
         <ChargePointConnector

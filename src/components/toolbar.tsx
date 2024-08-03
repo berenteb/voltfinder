@@ -6,6 +6,7 @@ import { FavoriteFilter } from '@/components/filters/favorite-filter';
 import { PlugFilter } from '@/components/filters/plug-filter';
 import { PowerFilter } from '@/components/filters/power-filter';
 import { ProviderFilter } from '@/components/filters/provider-filter';
+import { LoadingIndicator } from '@/components/loading-indicator';
 import { LocationButton } from '@/components/location-button';
 import { cn } from '@/lib/utils';
 import {
@@ -73,6 +74,7 @@ export function Toolbar({ filters, setFilters, providers }: ToolbarProps) {
           {filterCount > 0 && <FilterCountBadge count={filterCount} />}
         </Button>
       </div>
+      <LoadingIndicator />
       <div className='absolute top-5 left-5 z-10 space-y-2'>
         <FavoriteFilter
           filter={filters.find((f) => f.type === 'favorite') as FavoriteFilterItem | undefined}
