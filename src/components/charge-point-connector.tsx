@@ -1,10 +1,10 @@
 import { Fragment } from 'react';
 
+import { ConnectorViewModel } from '@/common/types/charger-view-model.types';
+import { DcsPriceComponent, DcsPriceElement, DcsPriceItem } from '@/common/types/dcs-price.types';
 import { PlugIcon } from '@/components/icons/plug-icon';
 import { PlugTypeLabels, StatusMap } from '@/lib/charger.utils';
 import { cn } from '@/lib/utils';
-import { ConnectorViewModel } from '@/types/charger-view-model.types';
-import { DcsPriceComponent, DcsPriceElement, DcsPriceItem } from '@/types/dcs-price.types';
 
 interface ChargePointPlugProps {
   plug: ConnectorViewModel;

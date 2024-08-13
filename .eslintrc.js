@@ -3,7 +3,6 @@ module.exports = {
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
-    sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin', 'prettier', 'simple-import-sort', 'react'],
   extends: [
@@ -22,7 +21,7 @@ module.exports = {
       version: 'detect',
     },
   },
-  ignorePatterns: ['.eslintrc.js', '.prettierrc.js'],
+  ignorePatterns: ['.eslintrc.js', '.prettierrc.js', 'build-sw.js', 'public/*'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

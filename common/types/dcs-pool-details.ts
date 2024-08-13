@@ -1,4 +1,4 @@
-import { CurrentType } from '@/types/common.types';
+import { CurrentType } from '@/common/types/common.types';
 
 export type DcsPoolDetailsRequestDto = {
   dcsPoolIds: string[];

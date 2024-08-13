@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { getPricesForConnectors } from '@/services/server/dcs.service';
-import { ConnectorPriceRequestDto } from '@/types/dcs-price.types';
+import { getPricesForConnectors } from '@/common/services/dcs.service';
+import { ConnectorPriceRequestDto } from '@/common/types/dcs-price.types';
 
 export async function POST(request: Request) {
   const body = await request.json();

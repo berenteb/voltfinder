@@ -7,10 +7,14 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "strictPropertyInitialization": false,
     "incremental": true,
     "plugins": [
       {
@@ -18,6 +22,7 @@
       }
     ],
     "paths": {
+      "@/common/*": ["./common/*"],
       "@/*": ["./src/*"]
     }
   },

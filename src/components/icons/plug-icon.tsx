@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-import { PlugType } from '@/types/common.types';
+import { PlugType } from '@/common/types/common.types';
 
 function CCSIcon(props: SVGProps<SVGSVGElement>) {
   return (

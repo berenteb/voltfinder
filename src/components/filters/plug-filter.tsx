@@ -1,9 +1,9 @@
+import { PlugType } from '@/common/types/common.types';
+import { PlugFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
 import { PlugIcon } from '@/components/icons/plug-icon';
 import { PlugTypeLabels } from '@/lib/charger.utils';
 import { cn } from '@/lib/utils';
-import { PlugType } from '@/types/common.types';
-import { PlugFilterItem } from '@/types/filter.types';
 
 interface PlugFilterProps {
   filter: PlugFilterItem | undefined;

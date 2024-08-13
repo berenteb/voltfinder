@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { TbBolt, TbHeartFilled } from 'react-icons/tb';
 
+import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { cn } from '@/lib/utils';
-import { ChargerViewModel } from '@/types/charger-view-model.types';
 
 interface ChargerMarkerProps {
   data: ChargerViewModel;

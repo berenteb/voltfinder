@@ -1,6 +1,6 @@
+import { ChargePointViewModel } from '@/common/types/charger-view-model.types';
+import { DcsPriceItem } from '@/common/types/dcs-price.types';
 import { ChargePointConnector } from '@/components/charge-point-connector';
-import { ChargePointViewModel } from '@/types/charger-view-model.types';
-import { DcsPriceItem } from '@/types/dcs-price.types';
 
 interface ChargePointProps {
   index: number;

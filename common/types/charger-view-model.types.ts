@@ -1,4 +1,4 @@
-import { PlugType } from '@/types/common.types';
+import { PlugType } from '@/common/types/common.types';
 
 export type ChargerViewModel = {
   id: string;

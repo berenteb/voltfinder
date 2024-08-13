@@ -1,9 +1,9 @@
+import { axiosService } from '@/common/services/axios.service';
+import { ChargePointViewModel, ChargerViewModel } from '@/common/types/charger-view-model.types';
+import { DcsChargePointItemDto } from '@/common/types/dcs.types';
+import { DcsPoolDetails } from '@/common/types/dcs-pool-details';
+import { ConnectorPriceRequestDto, DcsPriceResponseDto } from '@/common/types/dcs-price.types';
 import { mapDcsDataArrayToChargerViewModelArray } from '@/lib/charger.utils';
-import { axiosService } from '@/services/axios.service';
-import { ChargePointViewModel, ChargerViewModel } from '@/types/charger-view-model.types';
-import { DcsChargePointItemDto } from '@/types/dcs.types';
-import { DcsPoolDetails } from '@/types/dcs-pool-details';
-import { ConnectorPriceRequestDto, DcsPriceResponseDto } from '@/types/dcs-price.types';
 
 export const getDcsChargePoints = async (): Promise<ChargerViewModel[]> => {
   const response = await axiosService.get<DcsPoolDetails[]>('/api/dcs/charge-points');

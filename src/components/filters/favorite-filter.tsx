@@ -1,7 +1,7 @@
 import { TbHeart, TbHeartFilled } from 'react-icons/tb';
 
+import { FavoriteFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
-import { FavoriteFilterItem } from '@/types/filter.types';
 
 interface FavoriteFilterProps {
   filter: FavoriteFilterItem | undefined;

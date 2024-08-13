@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
+import { ChargerViewModel } from '@/common/types/charger-view-model.types';
+import { DcsPriceResponseDto } from '@/common/types/dcs-price.types';
 import { getDcsPrice } from '@/services/charge-point.service';
-import { ChargerViewModel } from '@/types/charger-view-model.types';
-import { DcsPriceResponseDto } from '@/types/dcs-price.types';
 
 export function usePrice(charger: ChargerViewModel): UseQueryResult<DcsPriceResponseDto> {
   return useQuery<DcsPriceResponseDto>({

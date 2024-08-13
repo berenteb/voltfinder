@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getChargePointsByIds, getPoolList } from '@/services/server/dcs.service';
+import { getChargePointsByIds, getPoolList } from '@/common/services/dcs.service';
 
 export const dynamic = 'force-dynamic';
 

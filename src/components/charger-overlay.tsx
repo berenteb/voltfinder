@@ -1,13 +1,27 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { TbCopy, TbCopyCheck, TbCrosshair, TbHeart, TbHeartFilled } from 'react-icons/tb';
+import {
+  TbBell,
+  TbBellFilled,
+  TbBellZ,
+  TbCopy,
+  TbCopyCheck,
+  TbCrosshair,
+  TbHeart,
+  TbHeartFilled,
+  TbNotification,
+  TbNotificationOff,
+} from 'react-icons/tb';
 
+import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { Button } from '@/components/button';
 import { ChargePoint } from '@/components/charge-point';
 import { usePrice } from '@/hooks/use-price';
+import { useSubscribeToUpdates } from '@/hooks/use-subscribe-to-updates';
+import { useSubscription } from '@/hooks/use-subscriptions';
+import { useUnsubscribeFromUpdates } from '@/hooks/use-unsubscribe-from-updates';
 import { cn } from '@/lib/utils';
 import { markAsFavorite, removeFromFavorites } from '@/services/storage.service';
-import { ChargerViewModel } from '@/types/charger-view-model.types';
 
 interface ChargerOverlayProps {
   data: ChargerViewModel;
@@ -15,6 +29,9 @@ interface ChargerOverlayProps {
 }
 
 export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
+  const subscription = useSubscription(data.id);
+  const subscribeToUpdates = useSubscribeToUpdates();
+  const unsubscribeFromUpdates = useUnsubscribeFromUpdates();
   const queryClient = useQueryClient();
   const [copied, setCopied] = useState(false);
   const price = usePrice(data);
@@ -44,6 +61,15 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
     }
   }, [copied]);
 
+  const onSubscribe = () => {
+    if (!subscription.isSuccess) return;
+    if (subscription.data) {
+      unsubscribeFromUpdates.mutate(data.id);
+    } else {
+      subscribeToUpdates.mutate(data.id);
+    }
+  };
+
   return (
     <div className='absolute bottom-0 left-0 right-0 z-10 p-5 w-full'>
       <div className='shadow-md rounded-xl max-w-full w-fit mx-auto p-2 space-y-2 bg-slate-100'>
@@ -52,9 +78,14 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
             <h2 className='font-bold'>{data.name}</h2>
             <p className='text-slate-500'>{data.operatorName}</p>
           </div>
-          <Button onClick={onCenterClick}>
-            <TbCrosshair size={20} />
-          </Button>
+          <div className='flex gap-2'>
+            <Button className='beta-badge' disabled={!subscription.isSuccess} onClick={onSubscribe}>
+              {subscription.data ? <TbBellFilled size={20} /> : <TbBellZ size={20} />}
+            </Button>
+            <Button onClick={onCenterClick}>
+              <TbCrosshair size={20} />
+            </Button>
+          </div>
         </div>
         <div className='flex gap-4 overflow-auto -ml-2 -mr-2 px-2'>
           {data.chargePoints?.map((chargePoint, index) => (

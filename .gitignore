@@ -37,3 +37,7 @@ next-env.d.ts
 
 .idea
 .env
+
+dist
+
+public/firebase-messaging-sw.js

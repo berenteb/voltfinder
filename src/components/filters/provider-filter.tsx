@@ -1,8 +1,8 @@
 import { TbCircle, TbCircleFilled } from 'react-icons/tb';
 
+import { ProviderFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
 import { cn } from '@/lib/utils';
-import { ProviderFilterItem } from '@/types/filter.types';
 
 interface ProviderFilterProps {
   providers: string[];

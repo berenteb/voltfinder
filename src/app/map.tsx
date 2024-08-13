@@ -2,6 +2,7 @@
 import { Bounds, Map, Marker, Point } from 'pigeon-maps';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { FilterItem } from '@/common/types/filter.types';
 import { ChargerMarker } from '@/components/charger-marker';
 import { ChargerOverlay } from '@/components/charger-overlay';
 import { useLocation } from '@/components/location-context';
@@ -15,7 +16,6 @@ import {
   removeFromLocalStorage,
   saveFiltersToLocalStorage,
 } from '@/services/storage.service';
-import { FilterItem } from '@/types/filter.types';
 
 export function MapComponent() {
   const ref = useRef<Map>(null);

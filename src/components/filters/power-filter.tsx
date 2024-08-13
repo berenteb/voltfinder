@@ -1,6 +1,6 @@
+import { PowerFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
 import { cn } from '@/lib/utils';
-import { PowerFilterItem } from '@/types/filter.types';
 
 interface PowerFilterProps {
   filter: PowerFilterItem | undefined;

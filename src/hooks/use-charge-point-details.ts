@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
+import { DcsChargePointItemDto } from '@/common/types/dcs.types';
 import { getDcsChargePointDetails } from '@/services/charge-point.service';
-import { DcsChargePointItemDto } from '@/types/dcs.types';
 
 export function useChargePointDetails(): UseQueryResult<DcsChargePointItemDto[]> {
   return useQuery<DcsChargePointItemDto[]>({

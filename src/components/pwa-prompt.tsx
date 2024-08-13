@@ -18,7 +18,7 @@ export function PwaPrompt() {
     if (displayMode === 'browser tab' && !isPromptDismissed()) {
       setPromptOpen(true);
     }
-  }, [window]);
+  }, [typeof window]);
 
   const onDismiss = () => {
     setPromptDismissed();

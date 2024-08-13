@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { TbAdjustmentsBolt, TbLocation, TbTrashX } from 'react-icons/tb';
 
+import {
+  FavoriteFilterItem,
+  FilterItem,
+  PlugFilterItem,
+  PowerFilterItem,
+  ProviderFilterItem,
+} from '@/common/types/filter.types';
 import { Button } from '@/components/button';
 import { FavoriteFilter } from '@/components/filters/favorite-filter';
 import { PlugFilter } from '@/components/filters/plug-filter';
@@ -8,13 +15,6 @@ import { PowerFilter } from '@/components/filters/power-filter';
 import { ProviderFilter } from '@/components/filters/provider-filter';
 import { LoadingIndicator } from '@/components/loading-indicator';
 import { cn } from '@/lib/utils';
-import {
-  FavoriteFilterItem,
-  FilterItem,
-  PlugFilterItem,
-  PowerFilterItem,
-  ProviderFilterItem,
-} from '@/types/filter.types';
 
 interface ToolbarProps {
   filters: FilterItem[];

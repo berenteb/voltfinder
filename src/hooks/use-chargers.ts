@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
+import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { useChargePointDetails } from '@/hooks/use-charge-point-details';
 import { useChargePoints } from '@/hooks/use-charge-points';
-import { ChargerViewModel } from '@/types/charger-view-model.types';
 
 export function useChargers() {
   const chargePoints = useChargePoints();

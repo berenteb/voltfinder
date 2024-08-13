@@ -1,4 +1,4 @@
-import { axiosService } from '@/services/axios.service';
+import { axiosService } from '@/common/services/axios.service';
 import {
   DcsChargePointItemDto,
   DcsChargePointResponseDto,
@@ -6,9 +6,9 @@ import {
   DcsChargingRequestDto,
   DcsChargingResponseDto,
   DcsPoolItemDto,
-} from '@/types/dcs.types';
-import { DcsPoolDetails, DcsPoolDetailsRequestDto, DcsPoolDetailsResponseDto } from '@/types/dcs-pool-details';
-import { ConnectorPriceRequestDto, DcsPriceRequestDto, DcsPriceResponseDto } from '@/types/dcs-price.types';
+} from '@/common/types/dcs.types';
+import { DcsPoolDetails, DcsPoolDetailsRequestDto, DcsPoolDetailsResponseDto } from '@/common/types/dcs-pool-details';
+import { ConnectorPriceRequestDto, DcsPriceRequestDto, DcsPriceResponseDto } from '@/common/types/dcs-price.types';
 
 type DcsRestApiPath = 'clusters' | 'charge-points' | 'pools';
 

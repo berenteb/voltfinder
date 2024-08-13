@@ -1,6 +1,6 @@
 'use client';
 
-import { FilterItem } from '@/types/filter.types';
+import { FilterItem } from '@/common/types/filter.types';
 
 export function saveFiltersToLocalStorage(filters: FilterItem[]) {
   localStorage.setItem('filters', JSON.stringify(filters));

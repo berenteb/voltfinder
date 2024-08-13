@@ -1,11 +1,11 @@
 import { Bounds } from 'pigeon-maps';
 import { useMemo } from 'react';
 
+import { ChargePointViewModel, ChargerViewModel, ConnectorViewModel } from '@/common/types/charger-view-model.types';
+import { CurrentType, PlugType } from '@/common/types/common.types';
+import { DcsPlugType, DcsPoolDetails } from '@/common/types/dcs-pool-details';
+import { FilterItem } from '@/common/types/filter.types';
 import { getFavorites } from '@/services/storage.service';
-import { ChargePointViewModel, ChargerViewModel, ConnectorViewModel } from '@/types/charger-view-model.types';
-import { CurrentType, PlugType } from '@/types/common.types';
-import { DcsPlugType, DcsPoolDetails } from '@/types/dcs-pool-details';
-import { FilterItem } from '@/types/filter.types';
 
 export function mapDcsDataArrayToChargerViewModelArray(data: DcsPoolDetails[]): ChargerViewModel[] {
   return data.reduce<ChargerViewModel[]>((acc, d) => {

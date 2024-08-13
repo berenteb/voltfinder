@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getPoolDetails, getPoolList } from '@/services/server/dcs.service';
+import { getPoolDetails, getPoolList } from '@/common/services/dcs.service';
 
 export const dynamic = 'force-dynamic';
 
