@@ -15,16 +15,21 @@ import {
   FIREBASE_VAPID_KEY,
 } from '@/config/frontend-env.config';
 
-type FirebaseContextType = {
-  token?: string;
-};
+type FirebaseContextType =
+  | {
+      token?: string;
+      register: () => void;
+    }
+  | undefined;
 
-const FirebaseContext = createContext<FirebaseContextType>({});
+const FirebaseContext = createContext<FirebaseContextType>(undefined);
 
 export function FirebaseProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string>();
+  const [messaging, setMessaging] = useState<Messaging>();
 
-  const register = (messaging: Messaging) => {
+  const register = () => {
+    if (!messaging) return;
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
         getToken(messaging, {
@@ -54,20 +59,22 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
     };
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
-    register(messaging);
+    setMessaging(messaging);
   };
 
   useEffect(() => {
     initializeFirebase();
+    register();
   }, []);
 
-  return <FirebaseContext.Provider value={{ token }}>{children}</FirebaseContext.Provider>;
+  return <FirebaseContext.Provider value={{ token, register }}>{children}</FirebaseContext.Provider>;
 }
 
-export function useFirebase(): FirebaseContextType {
-  if (!FirebaseContext) {
+export function useFirebase() {
+  const context = useContext(FirebaseContext);
+  if (typeof context === 'undefined') {
     throw new Error('useFirebase must be used within a FirebaseProvider');
   }
 
-  return useContext(FirebaseContext);
+  return context;
 }
