@@ -1,15 +1,10 @@
-import * as dotenv from 'dotenv';
-import * as env from 'env-var';
+export const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+export const FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+export const FIREBASE_AUTH_DOMAIN = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
+export const FIREBASE_STORAGE_BUCKET = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+export const FIREBASE_MESSAGING_SENDER_ID = process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID;
+export const FIREBASE_APP_ID = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;
+export const ANALYTICS_ID = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID;
+export const FIREBASE_VAPID_KEY = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
 
-dotenv.config();
-
-export const FIREBASE_API_KEY = env.get('NEXT_PUBLIC_FIREBASE_API_KEY').required().asString();
-export const FIREBASE_PROJECT_ID = env.get('NEXT_PUBLIC_FIREBASE_PROJECT_ID').required().asString();
-export const FIREBASE_AUTH_DOMAIN = env.get('NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN').required().asString();
-export const FIREBASE_STORAGE_BUCKET = env.get('NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET').required().asString();
-export const FIREBASE_MESSAGING_SENDER_ID = env.get('NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID').required().asString();
-export const FIREBASE_APP_ID = env.get('NEXT_PUBLIC_FIREBASE_APP_ID').required().asString();
-export const ANALYTICS_ID = env.get('NEXT_PUBLIC_ANALYTICS_ID').required().asString();
-export const FIREBASE_VAPID_KEY = env.get('NEXT_PUBLIC_FIREBASE_VAPID_KEY').required().asString();
-
-export const BACKEND_URL = env.get('NEXT_PUBLIC_BACKEND_URL').required().asString();
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
