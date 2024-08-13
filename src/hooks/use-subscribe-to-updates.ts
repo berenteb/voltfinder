@@ -5,18 +5,19 @@ import { subscribeToUpdates } from '@/services/notification.service';
 
 export function useSubscribeToUpdates() {
   const queryClient = useQueryClient();
-  const { token } = useFirebase();
+  const { getTokenWithGrant, token } = useFirebase();
   return useMutation({
     mutationFn: async (stationId: string) => {
-      if (!token) throw new Error('No token');
-      return subscribeToUpdates({ stationId, token });
+      const localToken = await getTokenWithGrant();
+      if (!localToken) throw new Error('No token');
+      return subscribeToUpdates({ stationId, token: localToken });
     },
     onMutate: async (stationId: string) => {
       const previousSubscriptions = queryClient.getQueryData<string[]>(['subscriptions', token]);
       queryClient.setQueryData(['subscriptions', token], [...(previousSubscriptions ?? []), stationId]);
       return previousSubscriptions;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscriptions', token] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscriptions'] }),
     onError: (_, __, context) => {
       queryClient.setQueryData(['subscriptions', token], context ?? []);
     },

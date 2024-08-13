@@ -18,7 +18,7 @@ import {
 type FirebaseContextType =
   | {
       token?: string;
-      register: () => void;
+      getTokenWithGrant: () => Promise<string | undefined>;
     }
   | undefined;
 
@@ -30,21 +30,49 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
 
   const register = () => {
     if (!messaging) return;
+    Notification.permission === 'granted' ? registerToken() : requestPermission();
+  };
+
+  const requestPermission = () => {
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
-        getToken(messaging, {
-          vapidKey: FIREBASE_VAPID_KEY,
-        })
-          .then((currentToken) => {
-            if (currentToken) {
-              setToken(currentToken);
-            }
-          })
-          .catch((err) => {
-            console.error('An error occurred while retrieving token. ', err);
-          });
+        registerToken();
       }
     });
+  };
+
+  const registerToken = () => {
+    if (!messaging) return;
+    getToken(messaging, {
+      vapidKey: FIREBASE_VAPID_KEY,
+    })
+      .then((currentToken) => {
+        if (currentToken) {
+          setToken(currentToken);
+        }
+      })
+      .catch((err) => {
+        console.error('An error occurred while retrieving token. ', err);
+      });
+  };
+
+  const getTokenWithGrant = async () => {
+    if (!messaging) return;
+    if (Notification.permission !== 'granted') {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        return undefined;
+      }
+    }
+    try {
+      const token = await getToken(messaging, {
+        vapidKey: FIREBASE_VAPID_KEY,
+      });
+      setToken(token);
+      return token;
+    } catch {
+      return undefined;
+    }
   };
 
   const initializeFirebase = () => {
@@ -67,7 +95,7 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
     register();
   }, []);
 
-  return <FirebaseContext.Provider value={{ token, register }}>{children}</FirebaseContext.Provider>;
+  return <FirebaseContext.Provider value={{ token, getTokenWithGrant }}>{children}</FirebaseContext.Provider>;
 }
 
 export function useFirebase() {

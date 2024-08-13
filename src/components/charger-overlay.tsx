@@ -5,7 +5,6 @@ import { TbBellFilled, TbBellZ, TbCopy, TbCopyCheck, TbCrosshair, TbHeart, TbHea
 import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { Button } from '@/components/button';
 import { ChargePoint } from '@/components/charge-point';
-import { useFirebase } from '@/components/firebase-context';
 import { usePrice } from '@/hooks/use-price';
 import { useSubscribeToUpdates } from '@/hooks/use-subscribe-to-updates';
 import { useSubscription } from '@/hooks/use-subscriptions';
@@ -22,7 +21,6 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
   const subscription = useSubscription(data.id);
   const subscribeToUpdates = useSubscribeToUpdates();
   const unsubscribeFromUpdates = useUnsubscribeFromUpdates();
-  const firebase = useFirebase();
   const queryClient = useQueryClient();
   const [copied, setCopied] = useState(false);
   const price = usePrice(data);
@@ -53,7 +51,6 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
   }, [copied]);
 
   const onSubscribe = () => {
-    firebase.register();
     if (!subscription.isSuccess) return;
     if (subscription.data) {
       unsubscribeFromUpdates.mutate(data.id);
