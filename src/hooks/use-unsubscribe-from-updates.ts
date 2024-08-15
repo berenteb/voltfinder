@@ -12,16 +12,16 @@ export function useUnsubscribeFromUpdates() {
       return unsubscribeFromUpdates({ stationId, token });
     },
     onMutate: async (stationId: string) => {
-      const previousSubscriptions = queryClient.getQueryData<string[]>(['subscriptions', token]);
+      const previousSubscriptions = queryClient.getQueryData<string[]>(['subscriptions']);
       queryClient.setQueryData(
-        ['subscriptions', token],
+        ['subscriptions'],
         (previousSubscriptions ?? []).filter((id) => id !== stationId)
       );
       return previousSubscriptions;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscriptions', token] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['subscriptions'] }),
     onError: (_, __, context) => {
-      queryClient.setQueryData(['subscriptions', token], context ?? []);
+      queryClient.setQueryData(['subscriptions'], context ?? []);
     },
   });
 }

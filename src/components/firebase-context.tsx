@@ -28,22 +28,13 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string>();
   const [messaging, setMessaging] = useState<Messaging>();
 
-  const register = () => {
-    if (!messaging) return;
-    Notification.permission === 'granted' ? registerToken() : requestPermission();
+  const register = (localMessaging: Messaging) => {
+    if (Notification.permission !== 'granted') return;
+    registerToken(localMessaging);
   };
 
-  const requestPermission = () => {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        registerToken();
-      }
-    });
-  };
-
-  const registerToken = () => {
-    if (!messaging) return;
-    getToken(messaging, {
+  const registerToken = (localMessaging: Messaging) => {
+    getToken(localMessaging, {
       vapidKey: FIREBASE_VAPID_KEY,
     })
       .then((currentToken) => {
@@ -92,8 +83,13 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     initializeFirebase();
-    register();
   }, []);
+
+  useEffect(() => {
+    if (messaging) {
+      register(messaging);
+    }
+  }, [messaging]);
 
   return <FirebaseContext.Provider value={{ token, getTokenWithGrant }}>{children}</FirebaseContext.Provider>;
 }

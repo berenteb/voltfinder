@@ -6,7 +6,7 @@ import { getSubscriptionsForToken } from '@/services/notification.service';
 export function useSubscription(stationId: string): UseQueryResult<boolean> {
   const { token } = useFirebase();
   return useQuery({
-    queryKey: ['subscriptions', token],
+    queryKey: ['subscriptions'],
     queryFn: () => {
       if (!token) {
         return [];
@@ -14,5 +14,7 @@ export function useSubscription(stationId: string): UseQueryResult<boolean> {
       return getSubscriptionsForToken(token);
     },
     select: (data) => data?.includes(stationId) ?? false,
+    enabled: Boolean(token),
+    initialData: [],
   });
 }

@@ -1,6 +1,15 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { TbBellFilled, TbBellZ, TbCopy, TbCopyCheck, TbCrosshair, TbHeart, TbHeartFilled } from 'react-icons/tb';
+import {
+  TbBellExclamation,
+  TbBellFilled,
+  TbBellZ,
+  TbCopy,
+  TbCopyCheck,
+  TbCrosshair,
+  TbHeart,
+  TbHeartFilled,
+} from 'react-icons/tb';
 
 import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { Button } from '@/components/button';
@@ -51,13 +60,19 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
   }, [copied]);
 
   const onSubscribe = () => {
-    if (!subscription.isSuccess) return;
     if (subscription.data) {
       unsubscribeFromUpdates.mutate(data.id);
     } else {
       subscribeToUpdates.mutate(data.id);
     }
   };
+
+  const notificationsDisabled = Notification.permission === 'denied';
+
+  let notificationIcon = subscription.data ? <TbBellFilled size={20} /> : <TbBellZ size={20} />;
+  if (notificationsDisabled) {
+    notificationIcon = <TbBellExclamation size={20} className='text-red-500' />;
+  }
 
   return (
     <div className='absolute bottom-0 left-0 right-0 z-10 p-5 w-full'>
@@ -68,8 +83,8 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
             <p className='text-slate-500'>{data.operatorName}</p>
           </div>
           <div className='flex gap-2'>
-            <Button className='beta-badge' disabled={!subscription.isSuccess} onClick={onSubscribe}>
-              {subscription.data ? <TbBellFilled size={20} /> : <TbBellZ size={20} />}
+            <Button className='beta-badge' disabled={notificationsDisabled} onClick={onSubscribe}>
+              {notificationIcon}
             </Button>
             <Button onClick={onCenterClick}>
               <TbCrosshair size={20} />
