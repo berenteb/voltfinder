@@ -80,7 +80,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
             <h2 className='font-bold'>{data.name}</h2>
             <p className='text-slate-500'>{data.operatorName}</p>
           </div>
-          <div className='flex gap-2'>
+          <div className='flex gap-2 h-fit'>
             <Button className='beta-badge' disabled={notificationsDisabled} onClick={onSubscribe}>
               {notificationIcon}
             </Button>

@@ -31,7 +31,7 @@ ol{
 
 .beta-badge:before {
     content: 'Beta';
-    @apply bg-teal-500 text-white text-xs font-bold rounded-full px-2 py-0.5 absolute -bottom-2.5 mx-auto;
+    @apply bg-teal-500 text-white text-xs font-bold rounded-full px-2 py-0.5 absolute -bottom-3 mx-auto;
 }
 
 .beta-badge {
