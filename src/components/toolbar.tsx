@@ -1,3 +1,4 @@
+import { sendGAEvent } from '@next/third-parties/google';
 import { useState } from 'react';
 import { TbAdjustmentsBolt, TbLocation, TbTrashX } from 'react-icons/tb';
 
@@ -38,6 +39,21 @@ export function Toolbar({ filters, setFilters, providers, onLocationClick }: Too
     setFilters(filters.filter((f) => f.type !== filter.type));
   };
 
+  const handleAllFiltersRemove = () => {
+    sendGAEvent('filter', 'remove', 'all');
+    setFilters([]);
+  };
+
+  const handleToolbarToggle = () => {
+    sendGAEvent('toolbar', 'toggle', isOpen ? 'close' : 'open');
+    setIsOpen((o) => !o);
+  };
+
+  const handleLocationClick = () => {
+    sendGAEvent('toolbar', 'location', 'click');
+    onLocationClick?.();
+  };
+
   const filterCount = filters.length;
 
   return (
@@ -64,11 +80,11 @@ export function Toolbar({ filters, setFilters, providers, onLocationClick }: Too
             setFilter={handleFilterChange}
             removeFilter={handleRemoveFilter}
           />
-          <Button onClick={() => setFilters([])} className='px-4'>
+          <Button onClick={handleAllFiltersRemove} className='px-4'>
             <TbTrashX /> Összes szűrő törlése
           </Button>
         </div>
-        <Button onClick={() => setIsOpen((o) => !o)} className='absolute top-5 right-5'>
+        <Button onClick={handleToolbarToggle} className='absolute top-5 right-5'>
           {!isOpen && <b>Szűrés</b>}
           <TbAdjustmentsBolt size={30} />
           {filterCount > 0 && <FilterCountBadge count={filterCount} />}
@@ -82,7 +98,7 @@ export function Toolbar({ filters, setFilters, providers, onLocationClick }: Too
           removeFilter={handleRemoveFilter}
         />
         {onLocationClick && (
-          <Button onClick={onLocationClick}>
+          <Button onClick={handleLocationClick}>
             <TbLocation size={30} />
           </Button>
         )}

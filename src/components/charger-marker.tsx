@@ -1,3 +1,4 @@
+import { sendGAEvent } from '@next/third-parties/google';
 import { useMemo } from 'react';
 import { TbBellFilled, TbBolt, TbHeartFilled } from 'react-icons/tb';
 
@@ -12,8 +13,14 @@ interface ChargerMarkerProps {
 
 export function ChargerMarker({ data, onClick, focused }: ChargerMarkerProps) {
   const status = useMemo(() => getChargerStatus(data), [data]);
+
+  const handleClick = () => {
+    sendGAEvent('map', 'charger', 'focus', data.id, data.name);
+    onClick();
+  };
+
   return (
-    <button onClick={onClick} className='relative pointer-events-auto z-0'>
+    <button onClick={handleClick} className='relative pointer-events-auto z-0'>
       {focused && (
         <div
           className={cn('absolute top-1/2 w-full h-full rounded-full pulse-dot bg-green-500', {

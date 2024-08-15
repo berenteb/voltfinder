@@ -1,3 +1,5 @@
+import { sendGAEvent } from '@next/third-parties/google';
+
 import { PlugType } from '@/common/types/common.types';
 import { PlugFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
@@ -12,15 +14,16 @@ interface PlugFilterProps {
 }
 
 export function PlugFilter({ filter, setFilter, removeFilter }: PlugFilterProps) {
-  const handleFilter = (provider: string) => {
-    if (filter?.value.includes(provider)) {
+  const handleFilter = (plug: string) => {
+    if (filter?.value.includes(plug)) {
+      sendGAEvent('filter', 'remove', 'plug', plug);
       if (filter.value.length === 1) {
         removeFilter(filter);
       } else {
-        setFilter({ type: 'plug', value: filter.value.filter((v) => v !== provider) });
+        setFilter({ type: 'plug', value: filter.value.filter((v) => v !== plug) });
       }
     } else {
-      setFilter({ type: 'plug', value: [...(filter?.value ?? []), provider] });
+      setFilter({ type: 'plug', value: [...(filter?.value ?? []), plug] });
     }
   };
   return (

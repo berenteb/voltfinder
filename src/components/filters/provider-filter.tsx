@@ -1,3 +1,4 @@
+import { sendGAEvent } from '@next/third-parties/google';
 import { TbCircle, TbCircleFilled } from 'react-icons/tb';
 
 import { ProviderFilterItem } from '@/common/types/filter.types';
@@ -14,12 +15,14 @@ interface ProviderFilterProps {
 export function ProviderFilter({ filter, setFilter, removeFilter, providers }: ProviderFilterProps) {
   const handleFilter = (provider: string) => {
     if (filter?.value.includes(provider)) {
+      sendGAEvent('filter', 'remove', 'provider', provider);
       if (filter.value.length === 1) {
         removeFilter(filter);
       } else {
         setFilter({ type: 'provider', value: filter.value.filter((v) => v !== provider) });
       }
     } else {
+      sendGAEvent('filter', 'add', 'provider', provider);
       setFilter({ type: 'provider', value: [...(filter?.value ?? []), provider] });
     }
   };

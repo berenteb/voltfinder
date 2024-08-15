@@ -1,3 +1,5 @@
+import { sendGAEvent } from '@next/third-parties/google';
+
 import { PowerFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
 import { cn } from '@/lib/utils';
@@ -11,8 +13,10 @@ interface PowerFilterProps {
 export function PowerFilter({ filter, setFilter, removeFilter }: PowerFilterProps) {
   const handleFilter = (power: number) => {
     if (filter?.value === power) {
+      sendGAEvent('filter', 'remove', 'power', power.toString());
       removeFilter(filter);
     } else {
+      sendGAEvent('filter', 'add', 'power', power.toString());
       setFilter({ type: 'power', value: power });
     }
   };

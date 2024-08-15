@@ -1,3 +1,4 @@
+import { sendGAEvent } from '@next/third-parties/google';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
@@ -36,18 +37,26 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(data.fullAddress);
     setCopied(true);
+    sendGAEvent('map', 'address', 'copy', data.id, data);
   };
 
   const onFavoriteClick = () => {
     if (data.isFavorite) {
+      sendGAEvent('favorite', 'remove', data.id, data.name);
       removeFromFavorites(data.id);
     } else {
+      sendGAEvent('favorite', 'add', data.id, data.name);
       markAsFavorite(data.id);
     }
 
     queryClient.setQueryData(['chargePoints'], (chargePoints: ChargerViewModel[] | undefined) =>
       chargePoints?.map((cp) => (cp.id === data.id ? { ...cp, isFavorite: !cp.isFavorite } : cp))
     );
+  };
+
+  const handleCenterClick = () => {
+    sendGAEvent('map', 'charger', 'center', data.id, data.name);
+    onCenterClick();
   };
 
   useEffect(() => {
@@ -59,8 +68,10 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
 
   const onSubscribe = () => {
     if (data.hasNotificationTurnedOn) {
+      sendGAEvent('notification', 'unsubscribe', data.id, data.name);
       unsubscribeFromUpdates.mutate(data.id);
     } else {
+      sendGAEvent('notification', 'subscribe', data.id, data.name);
       subscribeToUpdates.mutate(data.id);
     }
   };
@@ -84,7 +95,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
             <Button className='beta-badge' disabled={notificationsDisabled} onClick={onSubscribe}>
               {notificationIcon}
             </Button>
-            <Button onClick={onCenterClick}>
+            <Button onClick={handleCenterClick}>
               <TbCrosshair size={20} />
             </Button>
           </div>
