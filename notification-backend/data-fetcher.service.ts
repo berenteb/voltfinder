@@ -60,7 +60,7 @@ export class DataFetcherService {
 
   private getChargePointName(chargePoint: ChargePoint | undefined): string {
     return (
-      chargePoint?.connectors.map((connector) => `${connector.plugType} ${connector.powerLevel}`).join(', ') ??
+      chargePoint?.connectors.map((connector) => `${connector.plugType} ${connector.powerLevel} kW`).join(', ') ??
       'Ismeretlen'
     );
   }
