@@ -1,6 +1,8 @@
 'use client';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Bounds, Map, Marker, Point } from 'pigeon-maps';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { FilterItem } from '@/common/types/filter.types';
 import { ChargerMarker } from '@/components/charger-marker';
@@ -18,9 +20,12 @@ import {
 } from '@/services/storage.service';
 
 export function MapComponent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathName = usePathname();
   const ref = useRef<Map>(null);
   const [filters, setFilters] = useState<FilterItem[]>([]);
-  const [focusedId, setFocusedId] = useState<string>();
+  const [focusedId, setFocusedId] = useState<string | undefined | null>(searchParams.get('id'));
   const { location } = useLocation();
 
   const [bounds, setBounds] = useState<Bounds>();
@@ -54,8 +59,16 @@ export function MapComponent() {
     }
   };
 
+  const resetSearch = () => {
+    router.replace(pathName);
+  };
+
   useEffect(() => {
     setFilters(loadFiltersFromLocalStorage());
+  }, []);
+
+  useLayoutEffect(() => {
+    resetSearch();
   }, []);
 
   const onCenterCharger = () => {

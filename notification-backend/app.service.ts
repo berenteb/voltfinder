@@ -50,7 +50,7 @@ export class AppService {
           icon: `${FRONTEND_URL}/icon.png`,
         },
         fcmOptions: {
-          link: FRONTEND_URL,
+          link: `${FRONTEND_URL}?id=${chargerNotificationObject.stationId}`,
         },
       },
       token: chargerNotificationObject.token,
