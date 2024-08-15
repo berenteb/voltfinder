@@ -28,7 +28,7 @@ export class DataFetcherService {
           notificationData: {
             stationName: this.getStationName(station),
             chargePointName: this.getChargePointName(chargePoint),
-            status: status.status,
+            status: this.getStatusText(status.status),
           },
         };
       });
@@ -59,7 +59,10 @@ export class DataFetcherService {
   }
 
   private getChargePointName(chargePoint: ChargePoint | undefined): string {
-    return chargePoint?.connectors.map((connector) => connector.plugType).join(', ') ?? 'Ismeretlen';
+    return (
+      chargePoint?.connectors.map((connector) => `${connector.plugType} ${connector.powerLevel}`).join(', ') ??
+      'Ismeretlen'
+    );
   }
 
   private async getUpdatedStatusesForStation(station: DcsPoolDetails | undefined): Promise<ChargePointStatus[]> {
@@ -99,6 +102,19 @@ export class DataFetcherService {
         return ChargePointStatusEnum.Offline;
       default:
         return ChargePointStatusEnum.Unknown;
+    }
+  }
+
+  private getStatusText(status: ChargePointStatusEnum): string {
+    switch (status) {
+      case ChargePointStatusEnum.Available:
+        return 'Elérhető';
+      case ChargePointStatusEnum.Charging:
+        return 'Használatban';
+      case ChargePointStatusEnum.Offline:
+        return 'Nem elérhető';
+      default:
+        return 'Ismeretlen';
     }
   }
 
