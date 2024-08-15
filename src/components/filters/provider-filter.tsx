@@ -15,14 +15,14 @@ interface ProviderFilterProps {
 export function ProviderFilter({ filter, setFilter, removeFilter, providers }: ProviderFilterProps) {
   const handleFilter = (provider: string) => {
     if (filter?.value.includes(provider)) {
-      sendGAEvent('filter', 'remove', 'provider', provider);
+      sendGAEvent('event', 'remove_provider_filter', provider);
       if (filter.value.length === 1) {
         removeFilter(filter);
       } else {
         setFilter({ type: 'provider', value: filter.value.filter((v) => v !== provider) });
       }
     } else {
-      sendGAEvent('filter', 'add', 'provider', provider);
+      sendGAEvent('event', 'add_provider_filter', provider);
       setFilter({ type: 'provider', value: [...(filter?.value ?? []), provider] });
     }
   };

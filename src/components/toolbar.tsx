@@ -40,17 +40,17 @@ export function Toolbar({ filters, setFilters, providers, onLocationClick }: Too
   };
 
   const handleAllFiltersRemove = () => {
-    sendGAEvent('filter', 'remove', 'all');
+    sendGAEvent('event', 'remove_all_filters');
     setFilters([]);
   };
 
   const handleToolbarToggle = () => {
-    sendGAEvent('toolbar', 'toggle', isOpen ? 'close' : 'open');
+    sendGAEvent('event', 'toggle_toolbar', isOpen ? 'close' : 'open');
     setIsOpen((o) => !o);
   };
 
   const handleLocationClick = () => {
-    sendGAEvent('toolbar', 'location', 'click');
+    sendGAEvent('event', 'location_click');
     onLocationClick?.();
   };
 

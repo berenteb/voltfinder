@@ -22,7 +22,7 @@ export function PwaPrompt() {
   }, [typeof window]);
 
   const onDismiss = () => {
-    sendGAEvent('prompt', 'dismiss');
+    sendGAEvent('event', 'pwa_prompt_dismiss');
     setPromptDismissed();
     setPromptOpen(false);
   };

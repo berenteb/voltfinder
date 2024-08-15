@@ -37,15 +37,15 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(data.fullAddress);
     setCopied(true);
-    sendGAEvent('map', 'address', 'copy', data.id, data);
+    sendGAEvent('event', 'address_copy');
   };
 
   const onFavoriteClick = () => {
     if (data.isFavorite) {
-      sendGAEvent('favorite', 'remove', data.id, data.name);
+      sendGAEvent('event', 'remove_favorite');
       removeFromFavorites(data.id);
     } else {
-      sendGAEvent('favorite', 'add', data.id, data.name);
+      sendGAEvent('event', 'add_favorite');
       markAsFavorite(data.id);
     }
 
@@ -55,7 +55,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
   };
 
   const handleCenterClick = () => {
-    sendGAEvent('map', 'charger', 'center', data.id, data.name);
+    sendGAEvent('event', 'center_map', data.id);
     onCenterClick();
   };
 
@@ -68,10 +68,10 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
 
   const onSubscribe = () => {
     if (data.hasNotificationTurnedOn) {
-      sendGAEvent('notification', 'unsubscribe', data.id, data.name);
+      sendGAEvent('event', 'unsubscribe', data.id);
       unsubscribeFromUpdates.mutate(data.id);
     } else {
-      sendGAEvent('notification', 'subscribe', data.id, data.name);
+      sendGAEvent('event', 'subscribe', data.id);
       subscribeToUpdates.mutate(data.id);
     }
   };

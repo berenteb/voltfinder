@@ -15,7 +15,7 @@ export function ChargerMarker({ data, onClick, focused }: ChargerMarkerProps) {
   const status = useMemo(() => getChargerStatus(data), [data]);
 
   const handleClick = () => {
-    sendGAEvent('map', 'charger', 'focus', data.id, data.name);
+    sendGAEvent('event', 'charger_marker_click', data.id, data.name);
     onClick();
   };
 

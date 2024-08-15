@@ -13,10 +13,10 @@ interface FavoriteFilterProps {
 export function FavoriteFilter({ filter, setFilter, removeFilter }: FavoriteFilterProps) {
   const handleFilter = () => {
     if (filter) {
-      sendGAEvent('filter', 'remove', 'favorite', 'favorite');
+      sendGAEvent('event', 'remove_favorite_filter');
       removeFilter(filter);
     } else {
-      sendGAEvent('filter', 'add', 'favorite', 'favorite');
+      sendGAEvent('event', 'add_favorite_filter');
       setFilter({ type: 'favorite', value: undefined });
     }
   };

@@ -13,10 +13,10 @@ interface PowerFilterProps {
 export function PowerFilter({ filter, setFilter, removeFilter }: PowerFilterProps) {
   const handleFilter = (power: number) => {
     if (filter?.value === power) {
-      sendGAEvent('filter', 'remove', 'power', power.toString());
+      sendGAEvent('event', 'remove_power_filter', power.toString());
       removeFilter(filter);
     } else {
-      sendGAEvent('filter', 'add', 'power', power.toString());
+      sendGAEvent('event', 'add_power_filter', power.toString());
       setFilter({ type: 'power', value: power });
     }
   };
