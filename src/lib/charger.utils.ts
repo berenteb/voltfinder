@@ -90,6 +90,7 @@ export function mapDcsDataToChargerViewModel(data: DcsPoolDetails): ChargerViewM
     partyId: '',
     plugTypes: Array.from(new Set(chargePoints.flatMap((evse) => evse.plugTypes))),
     isFavorite: favorites.has(data.dcsPoolId ?? ''),
+    hasNotificationTurnedOn: false,
   };
 
   return mapped;

@@ -3,7 +3,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useFirebase } from '@/components/firebase-context';
 import { getSubscriptionsForToken } from '@/services/notification.service';
 
-export function useSubscription(stationId: string): UseQueryResult<boolean> {
+export function useSubscriptions(): UseQueryResult<string[]> {
   const { token } = useFirebase();
   return useQuery({
     queryKey: ['subscriptions'],
@@ -13,7 +13,6 @@ export function useSubscription(stationId: string): UseQueryResult<boolean> {
       }
       return getSubscriptionsForToken(token);
     },
-    select: (data) => data?.includes(stationId) ?? false,
     enabled: Boolean(token),
     initialData: [],
   });

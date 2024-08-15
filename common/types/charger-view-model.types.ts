@@ -13,6 +13,7 @@ export type ChargerViewModel = {
   plugTypes: PlugType[];
   maxPowerKw: number;
   isFavorite: boolean;
+  hasNotificationTurnedOn: boolean;
 };
 
 export type ChargePointViewModel = {

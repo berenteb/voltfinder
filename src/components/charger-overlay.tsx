@@ -16,7 +16,6 @@ import { Button } from '@/components/button';
 import { ChargePoint } from '@/components/charge-point';
 import { usePrice } from '@/hooks/use-price';
 import { useSubscribeToUpdates } from '@/hooks/use-subscribe-to-updates';
-import { useSubscription } from '@/hooks/use-subscriptions';
 import { useUnsubscribeFromUpdates } from '@/hooks/use-unsubscribe-from-updates';
 import { cn } from '@/lib/utils';
 import { markAsFavorite, removeFromFavorites } from '@/services/storage.service';
@@ -27,7 +26,6 @@ interface ChargerOverlayProps {
 }
 
 export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
-  const subscription = useSubscription(data.id);
   const subscribeToUpdates = useSubscribeToUpdates();
   const unsubscribeFromUpdates = useUnsubscribeFromUpdates();
   const queryClient = useQueryClient();
@@ -60,7 +58,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
   }, [copied]);
 
   const onSubscribe = () => {
-    if (subscription.data) {
+    if (data.hasNotificationTurnedOn) {
       unsubscribeFromUpdates.mutate(data.id);
     } else {
       subscribeToUpdates.mutate(data.id);
@@ -69,7 +67,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
 
   const notificationsDisabled = Notification.permission === 'denied';
 
-  let notificationIcon = subscription.data ? <TbBellFilled size={20} /> : <TbBellZ size={20} />;
+  let notificationIcon = data.hasNotificationTurnedOn ? <TbBellFilled size={20} /> : <TbBellZ size={20} />;
   if (notificationsDisabled) {
     notificationIcon = <TbBellExclamation size={20} className='text-red-500' />;
   }

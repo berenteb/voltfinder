@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { TbBolt, TbHeartFilled } from 'react-icons/tb';
+import { TbBellFilled, TbBolt, TbHeartFilled } from 'react-icons/tb';
 
 import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { cn } from '@/lib/utils';
@@ -34,9 +34,17 @@ export function ChargerMarker({ data, onClick, focused }: ChargerMarkerProps) {
       >
         <TbBolt size={20} />
       </div>
-      {data.isFavorite && (
-        <div className='absolute top-3 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold'>
-          <TbHeartFilled size={12} />
+      {(data.isFavorite || data.hasNotificationTurnedOn) && (
+        <div
+          className={cn(
+            'absolute top-3 -right-1 bg-red-500 text-white rounded-full w-5 h-5 gap-1 flex items-center justify-center text-xs font-bold',
+            {
+              'w-9 -right-5': data.isFavorite && data.hasNotificationTurnedOn,
+            }
+          )}
+        >
+          {data.isFavorite && <TbHeartFilled size={12} />}
+          {data.hasNotificationTurnedOn && <TbBellFilled size={12} />}
         </div>
       )}
       <div
