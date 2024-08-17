@@ -29,6 +29,7 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
   const [messaging, setMessaging] = useState<Messaging>();
 
   const register = (localMessaging: Messaging) => {
+    if (typeof Notification === 'undefined') return;
     if (Notification.permission !== 'granted') return;
     registerToken(localMessaging);
   };
@@ -49,6 +50,7 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
 
   const getTokenWithGrant = async () => {
     if (!messaging) return;
+    if (typeof Notification === 'undefined') return;
     if (Notification.permission !== 'granted') {
       const permission = await Notification.requestPermission();
       if (permission !== 'granted') {
