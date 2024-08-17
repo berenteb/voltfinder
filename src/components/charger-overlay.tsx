@@ -76,7 +76,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
     }
   };
 
-  const notificationsDisabled = Notification.permission === 'denied';
+  const notificationsDisabled = typeof Notification === 'undefined' || Notification.permission === 'denied';
 
   let notificationIcon = data.hasNotificationTurnedOn ? <TbBellFilled size={20} /> : <TbBellZ size={20} />;
   if (notificationsDisabled) {
