@@ -37,7 +37,7 @@ export function PwaPrompt() {
   }
 
   return (
-    <div className='absolute top-0 left-0 right-0 bottom-0 px-5 pt-5 pb-20 z-20 flex items-center justify-center max-h-screen'>
+    <div className='absolute top-0 left-0 right-0 bottom-0 p-5 z-20 flex items-center justify-center max-h-screen'>
       <div className='bg-white rounded-lg border-2 border-slate-50 p-10 space-y-5 overflow-auto max-w-screen-md h-fit max-h-full'>
         <h1 className='text-center font-bold text-4xl'>
           Üdvözöllek a<br />
