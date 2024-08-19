@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 
 import { MapComponent } from '@/app/map';
 import { FirebaseProvider } from '@/components/firebase-context';
+import { LoadingScreen } from '@/components/loading-screen';
 import { LocationProvider } from '@/components/location-context';
 
 const queryClient = new QueryClient();
@@ -13,7 +14,7 @@ const queryClient = new QueryClient();
 export default function Home() {
   return (
     <main className='h-full w-full'>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingScreen />}>
         <QueryClientProvider client={queryClient}>
           <FirebaseProvider>
             <LocationProvider>
