@@ -1,23 +1,13 @@
 import { sendGAEvent } from '@next/third-parties/google';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import {
-  TbBellExclamation,
-  TbBellFilled,
-  TbBellZ,
-  TbCopy,
-  TbCopyCheck,
-  TbCrosshair,
-  TbHeart,
-  TbHeartFilled,
-} from 'react-icons/tb';
+import { TbCopy, TbCopyCheck, TbCrosshair, TbHeart, TbHeartFilled } from 'react-icons/tb';
 
 import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { Button } from '@/components/button';
 import { ChargePoint } from '@/components/charge-point';
+import { NotificationButton } from '@/components/notification-button';
 import { usePrice } from '@/hooks/use-price';
-import { useSubscribeToUpdates } from '@/hooks/use-subscribe-to-updates';
-import { useUnsubscribeFromUpdates } from '@/hooks/use-unsubscribe-from-updates';
 import { cn } from '@/lib/utils';
 import { markAsFavorite, removeFromFavorites } from '@/services/storage.service';
 
@@ -27,8 +17,6 @@ interface ChargerOverlayProps {
 }
 
 export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
-  const subscribeToUpdates = useSubscribeToUpdates();
-  const unsubscribeFromUpdates = useUnsubscribeFromUpdates();
   const queryClient = useQueryClient();
   const [copied, setCopied] = useState(false);
   const price = usePrice(data);
@@ -66,23 +54,6 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
     }
   }, [copied]);
 
-  const onSubscribe = () => {
-    if (data.hasNotificationTurnedOn) {
-      sendGAEvent('event', 'unsubscribe', data.id);
-      unsubscribeFromUpdates.mutate(data.id);
-    } else {
-      sendGAEvent('event', 'subscribe', data.id);
-      subscribeToUpdates.mutate(data.id);
-    }
-  };
-
-  const notificationsDisabled = typeof Notification === 'undefined' || Notification.permission === 'denied';
-
-  let notificationIcon = data.hasNotificationTurnedOn ? <TbBellFilled size={20} /> : <TbBellZ size={20} />;
-  if (notificationsDisabled) {
-    notificationIcon = <TbBellExclamation size={20} className='text-red-500' />;
-  }
-
   return (
     <div className='absolute bottom-0 left-0 right-0 z-10 p-5 w-full'>
       <div className='shadow-md rounded-xl max-w-full w-fit mx-auto p-2 space-y-2 bg-slate-100'>
@@ -92,9 +63,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
             <p className='text-slate-500'>{data.operatorName}</p>
           </div>
           <div className='flex gap-2 h-fit'>
-            <Button className='beta-badge' disabled={notificationsDisabled} onClick={onSubscribe}>
-              {notificationIcon}
-            </Button>
+            <NotificationButton hasNotificationTurnedOn={data.hasNotificationTurnedOn} stationId={data.id} />
             <Button onClick={handleCenterClick}>
               <TbCrosshair size={20} />
             </Button>
