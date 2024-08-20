@@ -99,7 +99,7 @@ export function MapComponent() {
         defaultZoom={11}
         zoomSnap={false}
         center={center}
-        provider={osmHotProvider}
+        provider={provider}
         ref={ref}
       >
         {markers?.map((chargePoint) => (
@@ -122,7 +122,6 @@ export function MapComponent() {
   );
 }
 
-export const osmHotProvider = (x: number, y: number, z: number): string => {
-  return `https://tile.openstreetmap.fr/hot/${z}/${x}/${y}.png
-`;
+export const provider = (x: number, y: number, z: number): string => {
+  return `/api/map/${x}/${y}/${z}`;
 };
