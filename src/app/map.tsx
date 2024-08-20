@@ -11,6 +11,7 @@ import { useLocation } from '@/components/location-context';
 import { PwaPrompt } from '@/components/pwa-prompt';
 import { Toolbar } from '@/components/toolbar';
 import { UserMarker } from '@/components/user-marker';
+import { BACKEND_URL } from '@/config/frontend-env.config';
 import { useChargers } from '@/hooks/use-chargers';
 import { useFilteredMarkers, useMarkersInBound, useProvidersOfMarkers } from '@/lib/charger.utils';
 import {
@@ -123,5 +124,5 @@ export function MapComponent() {
 }
 
 export const provider = (x: number, y: number, z: number): string => {
-  return `/api/map/${x}/${y}/${z}`;
+  return `${BACKEND_URL}/map/${x}/${y}/${z}`;
 };
