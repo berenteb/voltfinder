@@ -55,8 +55,8 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
   }, [copied]);
 
   return (
-    <div className='absolute bottom-0 left-0 right-0 z-10 p-5 w-full'>
-      <div className='shadow-md rounded-xl max-w-full w-fit mx-auto p-2 space-y-2 bg-slate-100'>
+    <div className='absolute bottom-0 left-0 right-0 z-10 p-5 w-full pointer-events-none'>
+      <div className='shadow-md rounded-xl max-w-full w-fit mx-auto p-2 space-y-2 bg-slate-100 pointer-events-auto'>
         <div className='flex justify-between'>
           <div>
             <h2 className='font-bold'>{data.name}</h2>
