@@ -76,6 +76,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
               key={chargePoint.id}
               data={chargePoint}
               prices={price.data?.filter((p) => p.price_identifier.charge_point === chargePoint.id) ?? []}
+              priceLoading={price.isLoading}
             />
           ))}
         </div>

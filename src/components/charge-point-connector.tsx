@@ -3,16 +3,18 @@ import { Fragment } from 'react';
 import { ConnectorViewModel } from '@/common/types/charger-view-model.types';
 import { DcsPriceComponent, DcsPriceElement, DcsPriceItem } from '@/common/types/dcs-price.types';
 import { PlugIcon } from '@/components/icons/plug-icon';
+import { Skeleton } from '@/components/skeleton';
 import { PlugTypeLabels, StatusMap } from '@/lib/charger.utils';
 import { cn } from '@/lib/utils';
 
 interface ChargePointPlugProps {
   plug: ConnectorViewModel;
   price?: DcsPriceItem;
+  priceLoading?: boolean;
   status: string;
 }
 
-export function ChargePointConnector({ plug, status, price }: ChargePointPlugProps) {
+export function ChargePointConnector({ plug, status, price, priceLoading }: ChargePointPlugProps) {
   return (
     <div className='bg-slate-200 rounded-lg'>
       <div className='flex items-center justify-between border-2 border-slate-200 p-1 rounded-lg bg-white w-60'>
@@ -35,6 +37,12 @@ export function ChargePointConnector({ plug, status, price }: ChargePointPlugPro
           <p className='text-slate-500 text-xs'>{plug.currentType}</p>
         </div>
       </div>
+      {priceLoading && !price && (
+        <div className='p-1 space-y-0.5'>
+          <Skeleton />
+          <Skeleton />
+        </div>
+      )}
       {price && (
         <div className='p-1 rounded-b-lg'>
           {price.elements.map((element, index) => (

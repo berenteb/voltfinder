@@ -6,9 +6,10 @@ interface ChargePointProps {
   index: number;
   data: ChargePointViewModel;
   prices: DcsPriceItem[];
+  priceLoading?: boolean;
 }
 
-export function ChargePoint({ data, index, prices }: ChargePointProps) {
+export function ChargePoint({ data, index, prices, priceLoading }: ChargePointProps) {
   return (
     <div>
       <p>{index}. állás</p>
@@ -19,6 +20,7 @@ export function ChargePoint({ data, index, prices }: ChargePointProps) {
             key={connector.plugType}
             plug={connector}
             status={data.status}
+            priceLoading={priceLoading}
             price={prices.find(
               (p) =>
                 p.price_identifier.power_type === connector.currentType && p.price_identifier.power === connector.power
