@@ -84,6 +84,20 @@ export function MapPage() {
     resetSearch();
   }, []);
 
+  const locationAvailable = Boolean(location);
+
+  useEffect(() => {
+    if (locationAvailable && location && map) {
+      map.flyTo({
+        center: {
+          lat: location[0],
+          lon: location[1],
+        },
+        zoom: Math.max(zoom, 12),
+      });
+    }
+  }, [locationAvailable, map]);
+
   useEffect(() => {
     if (map) {
       const onZoom = () => {
