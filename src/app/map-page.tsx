@@ -11,7 +11,7 @@ import { useLocation } from '@/components/location-context';
 import { PwaPrompt } from '@/components/pwa-prompt';
 import { Toolbar } from '@/components/toolbar';
 import { UserMarker } from '@/components/user-marker';
-import { BACKEND_URL, MAPBOX_API_KEY } from '@/config/frontend-env.config';
+import { MAPBOX_API_KEY } from '@/config/frontend-env.config';
 import { useChargers } from '@/hooks/use-chargers';
 import { useFilteredMarkers, useMarkersInBound, useProvidersOfMarkers } from '@/lib/charger.utils';
 import {
@@ -92,11 +92,11 @@ export function MapPage() {
       const onMove = () => {
         setBounds(map.getBounds());
       };
-      map.on('zoom', onZoom);
-      map.on('move', onMove);
+      map.on('zoomend', onZoom);
+      map.on('moveend', onMove);
       return () => {
-        map.off('zoom', onZoom);
-        map.off('move', onMove);
+        map.off('zoomend', onZoom);
+        map.off('moveend', onMove);
       };
     }
   }, [map]);
@@ -142,7 +142,3 @@ export function MapPage() {
     </div>
   );
 }
-
-export const provider = (x: number, y: number, z: number): string => {
-  return `${BACKEND_URL}/map/${x}/${y}/${z}`;
-};
