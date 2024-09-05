@@ -13,7 +13,7 @@ export function ChargerMarker({ data, focused }: ChargerMarkerProps) {
   const status = useMemo(() => getChargerStatus(data), [data]);
 
   return (
-    <div className='relative  z-0'>
+    <div className='relative z-0 animate-scale-in origin-bottom'>
       {focused && (
         <div
           className={cn('absolute top-1/2 w-full h-full rounded-full pulse-dot bg-green-500', {
