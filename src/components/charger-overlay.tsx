@@ -13,7 +13,7 @@ import { markAsFavorite, removeFromFavorites } from '@/services/storage.service'
 
 interface ChargerOverlayProps {
   data: ChargerViewModel;
-  onCenterClick: () => void;
+  onCenterClick: (charger: ChargerViewModel) => void;
 }
 
 export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
@@ -44,7 +44,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
 
   const handleCenterClick = () => {
     sendGAEvent('event', 'center_map', data.id);
-    onCenterClick();
+    onCenterClick(data);
   };
 
   useEffect(() => {

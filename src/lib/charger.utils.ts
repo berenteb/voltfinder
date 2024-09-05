@@ -1,5 +1,5 @@
-import { Bounds } from 'pigeon-maps';
 import { useMemo } from 'react';
+import { LngLatBounds } from 'react-map-gl';
 
 import { ChargePointViewModel, ChargerViewModel, ConnectorViewModel } from '@/common/types/charger-view-model.types';
 import { CurrentType, PlugType } from '@/common/types/common.types';
@@ -124,18 +124,18 @@ export function useFilteredMarkers(markers: ChargerViewModel[], filters: FilterI
   }, [markers, filters]);
 }
 
-export function useMarkersInBound(bounds: Bounds | undefined, zoom: number, markers: ChargerViewModel[]) {
+export function useMarkersInBound(bounds: LngLatBounds | undefined | null, zoom: number, markers: ChargerViewModel[]) {
   return useMemo(() => {
-    if (!bounds) return markers;
-    const markersInBounds = markers.filter((chargePoint) => {
-      const [lat, lng] = chargePoint.coordinates;
-      return bounds.sw[0] < lat && lat < bounds.ne[0] && bounds.sw[1] < lng && lng < bounds.ne[1];
+    const markersInZoom = markers.filter((chargers) => {
+      return chargers.chargePoints?.some(
+        (cp) => (cp.maxPowerKw && cp.maxPowerKw >= 50) || chargers.isFavorite || zoom > 10
+      );
     });
-    if (zoom > 12) {
-      return markersInBounds;
-    }
-    return markersInBounds.filter((chargers) => {
-      return chargers.chargePoints?.some((cp) => (cp.maxPowerKw && cp.maxPowerKw >= 50) || chargers.isFavorite);
+    if (!bounds) return markersInZoom;
+    const [[west, south], [east, north]] = bounds.toArray();
+    return markersInZoom.filter((chargePoint) => {
+      const [lat, lng] = chargePoint.coordinates;
+      return lat < north && lat > south && lng < east && lng > west;
     });
   }, [bounds, markers, zoom]);
 }

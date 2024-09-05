@@ -1,10 +1,12 @@
 'use client';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense } from 'react';
+import { MapProvider } from 'react-map-gl';
 
-import { MapComponent } from '@/app/map';
+import { MapPage } from '@/app/map-page';
 import { FirebaseProvider } from '@/components/firebase-context';
 import { LoadingScreen } from '@/components/loading-screen';
 import { LocationProvider } from '@/components/location-context';
@@ -18,7 +20,9 @@ export default function Home() {
         <QueryClientProvider client={queryClient}>
           <FirebaseProvider>
             <LocationProvider>
-              <MapComponent />
+              <MapProvider>
+                <MapPage />
+              </MapProvider>
             </LocationProvider>
           </FirebaseProvider>
           <ReactQueryDevtools initialIsOpen={false} />

@@ -1,4 +1,3 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { useMemo } from 'react';
 import { TbBellFilled, TbBolt, TbHeartFilled } from 'react-icons/tb';
 
@@ -7,20 +6,14 @@ import { cn } from '@/lib/utils';
 
 interface ChargerMarkerProps {
   data: ChargerViewModel;
-  onClick: () => void;
   focused?: boolean;
 }
 
-export function ChargerMarker({ data, onClick, focused }: ChargerMarkerProps) {
+export function ChargerMarker({ data, focused }: ChargerMarkerProps) {
   const status = useMemo(() => getChargerStatus(data), [data]);
 
-  const handleClick = () => {
-    sendGAEvent('event', 'charger_marker_click', data.id, data.name);
-    onClick();
-  };
-
   return (
-    <button onClick={handleClick} className='relative pointer-events-auto z-0'>
+    <div className='relative  z-0'>
       {focused && (
         <div
           className={cn('absolute top-1/2 w-full h-full rounded-full pulse-dot bg-green-500', {
@@ -67,7 +60,7 @@ export function ChargerMarker({ data, onClick, focused }: ChargerMarkerProps) {
       >
         {data.chargePoints.length ?? '?'}
       </div>
-    </button>
+    </div>
   );
 }
 
