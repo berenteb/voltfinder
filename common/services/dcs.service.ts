@@ -9,7 +9,13 @@ import {
 } from '@/common/types/dcs.types';
 import { DcsPoolDetails, DcsPoolDetailsRequestDto, DcsPoolDetailsResponseDto } from '@/common/types/dcs-pool-details';
 import { ConnectorPriceRequestDto, DcsPriceRequestDto, DcsPriceResponseDto } from '@/common/types/dcs-price.types';
-import { MapBounds } from '@/config/bound';
+
+const MapBounds = {
+  latitudeNW: 48.6238540716,
+  longitudeNW: 16.2022982113,
+  latitudeSE: 45.7594811061,
+  longitudeSE: 22.710531447,
+};
 
 type DcsRestApiPath = 'clusters' | 'charge-points' | 'pools';
 
