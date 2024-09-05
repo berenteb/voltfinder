@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TbAdjustmentsBolt, TbLocation, TbTrashX } from 'react-icons/tb';
+import { TbAdjustmentsBolt, TbLocation, TbTrashX, TbZoomIn, TbZoomOut } from 'react-icons/tb';
 
 import {
   FavoriteFilterItem,
@@ -21,9 +21,11 @@ interface ToolbarProps {
   setFilters: (filters: FilterItem[]) => void;
   providers: string[];
   onLocationClick?: () => void;
+  onZoomIn: () => void;
+  onZoomOut: () => void;
 }
 
-export function Toolbar({ filters, setFilters, providers, onLocationClick }: ToolbarProps) {
+export function Toolbar({ filters, setFilters, providers, onLocationClick, onZoomIn, onZoomOut }: ToolbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleFilterChange = (filter: FilterItem) => {
@@ -90,17 +92,27 @@ export function Toolbar({ filters, setFilters, providers, onLocationClick }: Too
         </Button>
       </div>
       <LoadingIndicator />
-      <div className='absolute top-5 left-5 z-10 space-y-2'>
-        <FavoriteFilter
-          filter={filters.find((f) => f.type === 'favorite') as FavoriteFilterItem | undefined}
-          setFilter={handleFilterChange}
-          removeFilter={handleRemoveFilter}
-        />
-        {onLocationClick && (
-          <Button onClick={handleLocationClick}>
-            <TbLocation size={30} />
+      <div className='absolute top-5 left-5 z-10 space-y-10'>
+        <div className='space-y-2'>
+          <FavoriteFilter
+            filter={filters.find((f) => f.type === 'favorite') as FavoriteFilterItem | undefined}
+            setFilter={handleFilterChange}
+            removeFilter={handleRemoveFilter}
+          />
+          {onLocationClick && (
+            <Button onClick={handleLocationClick}>
+              <TbLocation size={30} />
+            </Button>
+          )}
+        </div>
+        <div className='space-y-2'>
+          <Button onClick={onZoomIn}>
+            <TbZoomIn size={30} />
           </Button>
-        )}
+          <Button onClick={onZoomOut}>
+            <TbZoomOut size={30} />
+          </Button>
+        </div>
       </div>
     </>
   );

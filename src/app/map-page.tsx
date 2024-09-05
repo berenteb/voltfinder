@@ -79,6 +79,14 @@ export function MapPage() {
     }
   };
 
+  const onZoomOut = () => {
+    if (map) map.zoomOut();
+  };
+
+  const onZoomIn = () => {
+    if (map) map.zoomIn();
+  };
+
   useEffect(() => {
     setFilters(loadFiltersFromLocalStorage());
     resetSearch();
@@ -117,7 +125,14 @@ export function MapPage() {
 
   return (
     <div className='relative w-full h-full'>
-      <Toolbar onLocationClick={onCenterLocation} filters={filters} setFilters={onSetFilters} providers={providers} />
+      <Toolbar
+        onZoomOut={onZoomOut}
+        onZoomIn={onZoomIn}
+        onLocationClick={onCenterLocation}
+        filters={filters}
+        setFilters={onSetFilters}
+        providers={providers}
+      />
       {focusedChargePoint && <ChargerOverlay onCenterClick={onCenterCharger} data={focusedChargePoint} />}
       <Map
         id='map'
