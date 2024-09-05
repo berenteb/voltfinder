@@ -62,7 +62,7 @@ export function MapPage() {
           lat: location[0],
           lon: location[1],
         },
-        zoom: 12,
+        zoom: Math.max(zoom, 12),
       });
     }
   };
@@ -74,7 +74,7 @@ export function MapPage() {
           lat: charger.coordinates[0],
           lon: charger.coordinates[1],
         },
-        zoom: 12,
+        zoom: Math.max(zoom, 12),
       });
     }
   };
