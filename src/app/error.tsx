@@ -13,7 +13,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   return (
     <html>
       <body>
-        <ErrorScreen error={error} onReset={reset} />;
+        <ErrorScreen onReset={reset} />;
       </body>
     </html>
   );
