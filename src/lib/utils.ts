@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/nextjs';
+import { sendGAEvent } from '@next/third-parties/google';
 import { Extras } from '@sentry/types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -8,8 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function sendEvent(event: string, extras?: Extras) {
-  Sentry.captureEvent({
-    message: event,
-    extra: extras,
+  sendGAEvent('event', event, {
+    ...extras,
   });
 }
