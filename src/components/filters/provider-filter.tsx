@@ -1,9 +1,8 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { TbCircle, TbCircleFilled } from 'react-icons/tb';
 
 import { ProviderFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
-import { cn } from '@/lib/utils';
+import { cn, sendEvent } from '@/lib/utils';
 
 interface ProviderFilterProps {
   providers: string[];
@@ -15,23 +14,25 @@ interface ProviderFilterProps {
 export function ProviderFilter({ filter, setFilter, removeFilter, providers }: ProviderFilterProps) {
   const handleFilter = (provider: string) => {
     if (filter?.value.includes(provider)) {
-      sendGAEvent('event', 'remove_provider_filter', provider);
+      sendEvent('remove_provider_filter', { provider });
       if (filter.value.length === 1) {
         removeFilter(filter);
       } else {
         setFilter({ type: 'provider', value: filter.value.filter((v) => v !== provider) });
       }
     } else {
-      sendGAEvent('event', 'add_provider_filter', provider);
+      sendEvent('add_provider_filter', { provider });
       setFilter({ type: 'provider', value: [...(filter?.value ?? []), provider] });
     }
   };
 
   const onAllClick = () => {
+    sendEvent('add_all_provider_filter', { providers });
     setFilter({ type: 'provider', value: providers });
   };
 
   const onNoneClick = () => {
+    sendEvent('remove_all_provider_filter', { providers });
     removeFilter({ type: 'provider', value: [] });
   };
 

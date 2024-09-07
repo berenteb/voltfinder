@@ -1,10 +1,10 @@
 'use client';
-import { sendGAEvent } from '@next/third-parties/google';
 import Bowser from 'bowser';
 import { useEffect, useMemo, useState } from 'react';
 import { TbShare2, TbSquarePlus } from 'react-icons/tb';
 
 import { Button } from '@/components/button';
+import { sendEvent } from '@/lib/utils';
 import { isPromptDismissed, setPromptDismissed } from '@/services/storage.service';
 
 export function PwaPrompt() {
@@ -22,7 +22,7 @@ export function PwaPrompt() {
   }, [typeof window]);
 
   const onDismiss = () => {
-    sendGAEvent('event', 'pwa_prompt_dismiss');
+    sendEvent('pwa_prompt_dismissed');
     setPromptDismissed();
     setPromptOpen(false);
   };

@@ -1,4 +1,3 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { useState } from 'react';
 import { TbAdjustmentsBolt, TbLocation, TbTrashX } from 'react-icons/tb';
 
@@ -15,7 +14,7 @@ import { PlugFilter } from '@/components/filters/plug-filter';
 import { PowerFilter } from '@/components/filters/power-filter';
 import { ProviderFilter } from '@/components/filters/provider-filter';
 import { LoadingIndicator } from '@/components/loading-indicator';
-import { cn } from '@/lib/utils';
+import { cn, sendEvent } from '@/lib/utils';
 
 interface ToolbarProps {
   filters: FilterItem[];
@@ -40,17 +39,17 @@ export function Toolbar({ filters, setFilters, providers, onLocationClick }: Too
   };
 
   const handleAllFiltersRemove = () => {
-    sendGAEvent('event', 'remove_all_filters');
+    sendEvent('remove_all_filters');
     setFilters([]);
   };
 
   const handleToolbarToggle = () => {
-    sendGAEvent('event', 'toggle_toolbar', isOpen ? 'close' : 'open');
+    sendEvent('toggle_toolbar');
     setIsOpen((o) => !o);
   };
 
   const handleLocationClick = () => {
-    sendGAEvent('event', 'location_click');
+    sendEvent('location_click');
     onLocationClick?.();
   };
 

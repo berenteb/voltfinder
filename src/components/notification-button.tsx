@@ -1,10 +1,10 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { TbBellCancel, TbBellFilled, TbBellOff, TbBellZ } from 'react-icons/tb';
 
 import { Button } from '@/components/button';
 import { Tooltip } from '@/components/tooltip';
 import { useSubscribeToUpdates } from '@/hooks/use-subscribe-to-updates';
 import { useUnsubscribeFromUpdates } from '@/hooks/use-unsubscribe-from-updates';
+import { sendEvent } from '@/lib/utils';
 
 interface NotificationButtonProps {
   hasNotificationTurnedOn: boolean;
@@ -17,10 +17,10 @@ export function NotificationButton({ stationId, hasNotificationTurnedOn }: Notif
 
   const onSubscribe = () => {
     if (hasNotificationTurnedOn) {
-      sendGAEvent('event', 'unsubscribe', stationId);
+      sendEvent('unsubscribe', { stationId });
       unsubscribeFromUpdates.mutate(stationId);
     } else {
-      sendGAEvent('event', 'subscribe', stationId);
+      sendEvent('subscribe', { stationId });
       subscribeToUpdates.mutate(stationId);
     }
   };

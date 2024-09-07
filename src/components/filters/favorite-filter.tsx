@@ -1,8 +1,8 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { TbHeart, TbHeartFilled } from 'react-icons/tb';
 
 import { FavoriteFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
+import { sendEvent } from '@/lib/utils';
 
 interface FavoriteFilterProps {
   filter: FavoriteFilterItem | undefined;
@@ -13,10 +13,10 @@ interface FavoriteFilterProps {
 export function FavoriteFilter({ filter, setFilter, removeFilter }: FavoriteFilterProps) {
   const handleFilter = () => {
     if (filter) {
-      sendGAEvent('event', 'remove_favorite_filter');
+      sendEvent('remove_favorite_filter');
       removeFilter(filter);
     } else {
-      sendGAEvent('event', 'add_favorite_filter');
+      sendEvent('add_favorite_filter');
       setFilter({ type: 'favorite', value: undefined });
     }
   };

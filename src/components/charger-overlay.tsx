@@ -1,4 +1,3 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { TbCopy, TbCopyCheck, TbCrosshair, TbHeart, TbHeartFilled } from 'react-icons/tb';
@@ -8,8 +7,8 @@ import { Button } from '@/components/button';
 import { ChargePoint } from '@/components/charge-point';
 import { NotificationButton } from '@/components/notification-button';
 import { usePrice } from '@/hooks/use-price';
-import { cn } from '@/lib/utils';
-import { markAsFavorite, removeFromFavorites } from '@/services/storage.service';
+import { cn, sendEvent } from '@/lib/utils';
+import { removeFromFavorites } from '@/services/storage.service';
 
 interface ChargerOverlayProps {
   data: ChargerViewModel;
@@ -25,16 +24,15 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(data.fullAddress);
     setCopied(true);
-    sendGAEvent('event', 'address_copy');
+    sendEvent('copy_address', { chargerId: data.id });
   };
 
   const onFavoriteClick = () => {
     if (data.isFavorite) {
-      sendGAEvent('event', 'remove_favorite');
+      sendEvent('remove_favorite', { chargerId: data.id });
       removeFromFavorites(data.id);
     } else {
-      sendGAEvent('event', 'add_favorite');
-      markAsFavorite(data.id);
+      sendEvent('add_favorite', { chargerId: data.id });
     }
 
     queryClient.setQueryData(['chargePoints'], (chargePoints: ChargerViewModel[] | undefined) =>
@@ -43,7 +41,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
   };
 
   const handleCenterClick = () => {
-    sendGAEvent('event', 'center_map', data.id);
+    sendEvent('center_map', { chargerId: data.id });
     onCenterClick(data);
   };
 

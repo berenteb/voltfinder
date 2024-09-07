@@ -1,6 +1,15 @@
+import * as Sentry from '@sentry/nextjs';
+import { Extras } from '@sentry/types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function sendEvent(event: string, extras?: Extras) {
+  Sentry.captureEvent({
+    message: event,
+    extra: extras,
+  });
 }

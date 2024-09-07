@@ -1,11 +1,9 @@
-import { sendGAEvent } from '@next/third-parties/google';
-
 import { PlugType } from '@/common/types/common.types';
 import { PlugFilterItem } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
 import { PlugIcon } from '@/components/icons/plug-icon';
 import { PlugTypeLabels } from '@/lib/charger.utils';
-import { cn } from '@/lib/utils';
+import { cn, sendEvent } from '@/lib/utils';
 
 interface PlugFilterProps {
   filter: PlugFilterItem | undefined;
@@ -16,14 +14,18 @@ interface PlugFilterProps {
 export function PlugFilter({ filter, setFilter, removeFilter }: PlugFilterProps) {
   const handleFilter = (plug: string) => {
     if (filter?.value.includes(plug)) {
-      sendGAEvent('event', 'remove_plug_filter', plug);
+      sendEvent('remove_plug_filter', {
+        plug,
+      });
       if (filter.value.length === 1) {
         removeFilter(filter);
       } else {
         setFilter({ type: 'plug', value: filter.value.filter((v) => v !== plug) });
       }
     } else {
-      sendGAEvent('event', 'add_plug_filter', plug);
+      sendEvent('add_plug_filter', {
+        plug,
+      });
       setFilter({ type: 'plug', value: [...(filter?.value ?? []), plug] });
     }
   };
