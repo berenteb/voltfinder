@@ -69,18 +69,22 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
   };
 
   const initializeFirebase = () => {
-    const firebaseConfig = {
-      apiKey: FIREBASE_API_KEY,
-      authDomain: FIREBASE_AUTH_DOMAIN,
-      projectId: FIREBASE_PROJECT_ID,
-      storageBucket: FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-      appId: FIREBASE_APP_ID,
-      measurementId: ANALYTICS_ID,
-    };
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
-    setMessaging(messaging);
+    try {
+      const firebaseConfig = {
+        apiKey: FIREBASE_API_KEY,
+        authDomain: FIREBASE_AUTH_DOMAIN,
+        projectId: FIREBASE_PROJECT_ID,
+        storageBucket: FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+        appId: FIREBASE_APP_ID,
+        measurementId: ANALYTICS_ID,
+      };
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
+      setMessaging(messaging);
+    } catch (err) {
+      console.error('An error occurred while initializing Firebase. ', err);
+    }
   };
 
   useEffect(() => {
