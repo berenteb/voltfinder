@@ -139,7 +139,6 @@ export function MapPage() {
         mapboxAccessToken={MAPBOX_API_KEY}
         onClick={() => setFocusedId(undefined)}
         mapStyle='mapbox://styles/mapbox/light-v11'
-        dragRotate={false}
         initialViewState={{
           latitude: 47.498333,
           longitude: 19.040833,

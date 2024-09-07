@@ -9,6 +9,7 @@ import {
   ProviderFilterItem,
 } from '@/common/types/filter.types';
 import { Button } from '@/components/button';
+import { CompassButton } from '@/components/compass-button';
 import { FavoriteFilter } from '@/components/filters/favorite-filter';
 import { PlugFilter } from '@/components/filters/plug-filter';
 import { PowerFilter } from '@/components/filters/power-filter';
@@ -112,6 +113,7 @@ export function Toolbar({ filters, setFilters, providers, onLocationClick, onZoo
           <Button onClick={onZoomOut}>
             <TbZoomOut size={30} />
           </Button>
+          <CompassButton />
         </div>
       </div>
     </>
