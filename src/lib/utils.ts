@@ -12,3 +12,9 @@ export function sendEvent(event: string, extras?: Extras) {
     ...extras,
   });
 }
+
+export function isBrowserSupported() {
+  return (
+    typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
+  );
+}

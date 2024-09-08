@@ -14,6 +14,7 @@ import {
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_VAPID_KEY,
 } from '@/config/frontend-env.config';
+import { isBrowserSupported } from '@/lib/utils';
 
 type FirebaseContextType =
   | {
@@ -69,6 +70,7 @@ export function FirebaseProvider({ children }: PropsWithChildren) {
   };
 
   const initializeFirebase = () => {
+    if (!isBrowserSupported()) return;
     try {
       const firebaseConfig = {
         apiKey: FIREBASE_API_KEY,
