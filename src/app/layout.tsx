@@ -1,7 +1,7 @@
 import './globals.css';
 
 import { GoogleAnalytics } from '@next/third-parties/google';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
 
