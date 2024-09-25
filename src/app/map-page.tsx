@@ -26,7 +26,7 @@ export function MapPage() {
   const pathName = usePathname();
   const { map } = useMap();
   const [filters, setFilters] = useState<FilterItem[]>([]);
-  const [focusedId, setFocusedId] = useState<string | undefined | null>(searchParams.get('id'));
+  const [focusedId, setFocusedId] = useState<string | undefined | null>();
   const { location } = useLocation();
 
   const { chargers } = useChargers();
@@ -49,10 +49,6 @@ export function MapPage() {
     } else {
       removeFromLocalStorage();
     }
-  };
-
-  const resetSearch = () => {
-    router.replace(pathName);
   };
 
   const onCenterLocation = () => {
@@ -79,6 +75,17 @@ export function MapPage() {
     }
   };
 
+  const onSelectCharger = (charger: ChargerViewModel) => {
+    setFocusedId(charger.id);
+    onCenterCharger(charger);
+    router.push(`${pathName}?id=${charger.id}`);
+  };
+
+  const onUnselectCharger = () => {
+    setFocusedId(undefined);
+    router.push(pathName);
+  };
+
   const onZoomOut = () => {
     if (map) map.zoomOut();
   };
@@ -89,10 +96,20 @@ export function MapPage() {
 
   useEffect(() => {
     setFilters(loadFiltersFromLocalStorage());
-    resetSearch();
   }, []);
 
+  const searchedId = searchParams.get('id');
+
+  const chargersAvailable = Boolean(chargers) && chargers.length > 0;
   const locationAvailable = Boolean(location);
+  const searchParamsAvailable = Boolean(searchedId);
+
+  useEffect(() => {
+    if (searchParamsAvailable && chargersAvailable) {
+      const charger = chargers.find((c) => c.id === searchedId);
+      if (charger) onSelectCharger(charger);
+    }
+  }, [searchParamsAvailable, chargersAvailable]);
 
   useEffect(() => {
     if (locationAvailable && location && map) {
@@ -137,7 +154,7 @@ export function MapPage() {
       <Map
         id='map'
         mapboxAccessToken={MAPBOX_API_KEY}
-        onClick={() => setFocusedId(undefined)}
+        onClick={onUnselectCharger}
         mapStyle='mapbox://styles/mapbox/light-v11'
         initialViewState={{
           latitude: 47.498333,
@@ -149,8 +166,7 @@ export function MapPage() {
           <Marker
             onClick={(e) => {
               e.originalEvent.stopPropagation();
-              setFocusedId(chargePoint.id);
-              onCenterCharger(chargePoint);
+              onSelectCharger(chargePoint);
             }}
             key={chargePoint.id}
             anchor='bottom'
