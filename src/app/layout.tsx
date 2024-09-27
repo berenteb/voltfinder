@@ -1,6 +1,8 @@
 import './globals.css';
 
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
@@ -28,6 +30,8 @@ export default function RootLayout({
     <html lang='hu'>
       <body className={inter.className}>{children}</body>
       {ANALYTICS_ID && <GoogleAnalytics gaId={ANALYTICS_ID} />}
+      <Analytics />
+      <SpeedInsights />
     </html>
   );
 }
