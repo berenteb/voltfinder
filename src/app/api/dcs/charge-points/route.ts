@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { getPoolDetails, getPoolList } from '@/common/services/dcs.service';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60 * 60;
 
 export const GET = async () => {
   const pools = await getPoolList();
