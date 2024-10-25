@@ -7,6 +7,8 @@ import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
 
+import { keywords } from '@/lib/keywords';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -17,6 +19,7 @@ export const metadata: Metadata = {
     name: 'Berente Bálint',
   },
   manifest: '/manifest.json',
+  keywords: keywords,
 };
 
 const ANALYTICS_ID = process.env.NEXT_PUBLIC_ANALYTICS_ID;
