@@ -18,6 +18,15 @@ export const metadata: Metadata = {
   authors: {
     name: 'Berente Bálint',
   },
+  openGraph: {
+    title: 'Voltfinder',
+    description: 'Találd meg a legrelevánsabb elektromos autó töltőket!',
+    type: 'website',
+    siteName: 'Voltfinder',
+    locale: 'hu_HU',
+    url: 'https://voltfinder.hu',
+    countryName: 'Hungary',
+  },
   manifest: '/manifest.json',
   keywords: keywords,
 };
