@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { useChargePoints } from '@/hooks/use-charge-points';
 import { useSubscriptions } from '@/hooks/use-subscriptions';
+import { getFavorites } from '@/services/storage.service';
 
 export function useChargers() {
   const chargePoints = useChargePoints();
@@ -14,10 +15,7 @@ export function useChargers() {
     return chargePointsData.map<ChargerViewModel>((charger) => {
       return {
         ...charger,
-        chargePoints: charger.chargePoints.map((cp) => ({
-          ...cp,
-          status: 'UNKNOWN',
-        })),
+        isFavorite: getFavorites().has(charger.id),
         hasNotificationTurnedOn: subscriptions.data?.includes(charger.id) ?? false,
       };
     });

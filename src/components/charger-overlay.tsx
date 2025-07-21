@@ -4,6 +4,7 @@ import { TbCopy, TbCopyCheck, TbCrosshair, TbHeart, TbHeartFilled, TbShare } fro
 import { ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { Button } from '@/components/button';
 import { ChargePoint } from '@/components/charge-point';
+import { NotificationButton } from '@/components/notification-button';
 import { cn, sendEvent, useCopyButtonBehavior } from '@/lib/utils';
 import { removeFromFavorites } from '@/services/storage.service';
 
@@ -54,7 +55,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
             <p className='text-slate-500'>{data.operatorName}</p>
           </div>
           <div className='flex gap-2 h-fit'>
-            {/* <NotificationButton hasNotificationTurnedOn={data.hasNotificationTurnedOn} stationId={data.id} /> */}
+            <NotificationButton hasNotificationTurnedOn={data.hasNotificationTurnedOn} stationId={data.id} />
             <Button onClick={handleCenterClick}>
               <TbCrosshair size={20} />
             </Button>
@@ -62,7 +63,7 @@ export function ChargerOverlay({ data, onCenterClick }: ChargerOverlayProps) {
         </div>
         <div className='flex gap-4 overflow-auto -ml-2 -mr-2 px-2'>
           {data.chargePoints?.map((chargePoint, index) => (
-            <ChargePoint index={index + 1} key={chargePoint.id} data={chargePoint} prices={[]} priceLoading={false} />
+            <ChargePoint index={index + 1} key={chargePoint.id} data={chargePoint} />
           ))}
         </div>
         <p className='italic text-slate-500'>{data.fullAddress}</p>

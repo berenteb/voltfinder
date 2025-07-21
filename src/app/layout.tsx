@@ -40,10 +40,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='hu'>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children} <SpeedInsights />
+      </body>
       {ANALYTICS_ID && <GoogleAnalytics gaId={ANALYTICS_ID} />}
       <Analytics />
-      <SpeedInsights />
     </html>
   );
 }

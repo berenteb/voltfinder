@@ -7,19 +7,15 @@ import { getMessaging, Message } from 'firebase-admin/messaging';
 
 import { ChargerNotificationObject, SubscribeForUpdatesDto, SubscriptionListDto } from '@/common/types/types';
 
-import { DataFetcherService } from './data-fetcher.service';
 import { FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY, FIREBASE_PROJECT_ID, FRONTEND_URL } from './environment.config';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
-export class AppService {
-  private readonly logger = new Logger(AppService.name);
+export class NotificationService {
+  private readonly logger = new Logger(NotificationService.name);
   private readonly firebaseApp: App;
 
-  constructor(
-    private readonly prismaService: PrismaService,
-    private readonly dataFetcherService: DataFetcherService
-  ) {
+  constructor(private readonly prismaService: PrismaService) {
     this.firebaseApp = initializeApp({
       credential: credential.cert({
         projectId: FIREBASE_PROJECT_ID,
@@ -27,12 +23,6 @@ export class AppService {
         privateKey: FIREBASE_PRIVATE_KEY,
       }),
     });
-  }
-
-  async getNotificationObjects(): Promise<ChargerNotificationObject[]> {
-    this.logger.log('Getting notification objects');
-    const subscriptions = await this.getSubscriptions();
-    return await this.dataFetcherService.getChargerNotificationObjects(subscriptions);
   }
 
   sendNotification(chargerNotificationObject: ChargerNotificationObject): void {
@@ -68,6 +58,30 @@ export class AppService {
       });
   }
 
+  async getSubscriptionsForToken(token: string): Promise<SubscriptionListDto> {
+    const subscriptions = await this.prismaService.subscription.findMany({
+      where: {
+        token,
+      },
+    });
+
+    return subscriptions.map((subscription) => subscription.stationId);
+  }
+
+  async getSubscriptionsForStation(stationId: string): Promise<Subscription[]> {
+    const subscriptions = await this.prismaService.subscription.findMany({
+      where: {
+        stationId,
+      },
+    });
+
+    return subscriptions;
+  }
+
+  async getAllSubscriptions(): Promise<Subscription[]> {
+    return this.prismaService.subscription.findMany();
+  }
+
   async subscribeToUpdates(data: SubscribeForUpdatesDto) {
     this.validateDto(data);
     this.logger.log(`Subscribing to updates for station ${data.stationId}`);
@@ -81,7 +95,7 @@ export class AppService {
 
   async unsubscribeFromUpdates(data: SubscribeForUpdatesDto) {
     this.validateDto(data);
-    const subscription = await this.prismaService.subscription.findUnique({
+    await this.prismaService.subscription.delete({
       where: {
         stationId_token: {
           stationId: data.stationId,
@@ -89,12 +103,16 @@ export class AppService {
         },
       },
     });
-    if (!subscription) {
-      this.logger.error('Subscription not found');
-      throw new BadRequestException('Subscription not found');
-    }
-    this.logger.log(`Manually removing subscription for station ${data.stationId}`);
-    await this.removeSubscriptions([subscription]);
+  }
+
+  async removeOutdatedSubscriptions(): Promise<void> {
+    await this.prismaService.subscription.deleteMany({
+      where: {
+        createdAt: {
+          lt: subHours(new Date(), 1),
+        },
+      },
+    });
   }
 
   private validateDto(data: SubscribeForUpdatesDto): void {
@@ -106,61 +124,5 @@ export class AppService {
       this.logger.error('Station ID was not provided');
       throw new BadRequestException('Station ID is required');
     }
-  }
-
-  async removeOutdatedSubscriptions(): Promise<void> {
-    const outdatedSubscriptions = await this.getOutdatedSubscriptions();
-    if (outdatedSubscriptions.length > 0) {
-      this.logger.log(`Removing ${outdatedSubscriptions.length} outdated subscriptions`);
-    }
-    await this.removeSubscriptions(outdatedSubscriptions);
-  }
-
-  private async removeSubscriptions(subscriptions: Subscription[]): Promise<void> {
-    for (const subscription of subscriptions) {
-      await this.prismaService.subscription.delete({
-        where: {
-          stationId_token: {
-            stationId: subscription.stationId,
-            token: subscription.token,
-          },
-        },
-      });
-    }
-
-    const remainingSubscriptions = await this.getSubscriptions();
-    const usedStations = remainingSubscriptions.map((subscription) => subscription.stationId);
-
-    await this.prismaService.chargePointStatus.deleteMany({
-      where: {
-        stationId: {
-          notIn: usedStations,
-        },
-      },
-    });
-  }
-
-  async getSubscriptionsForToken(token: string): Promise<SubscriptionListDto> {
-    const subscriptions = await this.prismaService.subscription.findMany({
-      where: {
-        token,
-      },
-    });
-
-    return subscriptions.map((subscription) => subscription.stationId);
-  }
-
-  private getSubscriptions(): Promise<Subscription[]> {
-    return this.prismaService.subscription.findMany();
-  }
-
-  private async getOutdatedSubscriptions() {
-    return this.prismaService.subscription.findMany({
-      where: {
-        createdAt: {
-          lt: subHours(new Date(), 1),
-        },
-      },
-    });
   }
 }

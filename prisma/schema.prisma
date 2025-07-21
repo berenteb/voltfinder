@@ -15,16 +15,3 @@ model Subscription {
 
   @@id([stationId, token])
 }
-
-model ChargePointStatus {
-  id        String                @id
-  stationId String
-  status    ChargePointStatusEnum
-}
-
-enum ChargePointStatusEnum {
-  Available
-  Charging
-  Offline
-  Unknown
-}

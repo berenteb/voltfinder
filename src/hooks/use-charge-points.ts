@@ -7,7 +7,7 @@ export function useChargePoints(): UseQueryResult<ChargerViewModel[]> {
   return useQuery<ChargerViewModel[]>({
     queryKey: ['chargePoints'],
     queryFn: () => getMobilitiChargePoints(),
-    // refetchInterval: 60000,
+    refetchInterval: 60000,
     initialData: [],
   });
 }
