@@ -5,7 +5,66 @@ import { ChargePointViewModel, ChargerViewModel, ConnectorViewModel } from '@/co
 import { CurrentType, PlugType } from '@/common/types/common.types';
 import { DcsPlugType, DcsPoolDetails } from '@/common/types/dcs-pool-details';
 import { FilterItem } from '@/common/types/filter.types';
+import { MobilitiLocationResponse } from '@/common/types/mobiliti.types';
 import { getFavorites } from '@/services/storage.service';
+
+export function mapMobilitiDataToChargerViewModel(data: MobilitiLocationResponse): ChargerViewModel[] {
+  const favorites = getFavorites();
+
+  return data.map((d) => {
+    // Map EVSEs to charge points
+    const chargePoints: ChargePointViewModel[] = d.evses.map((evse) => {
+      const connectors: ConnectorViewModel[] = [
+        {
+          plugType: mapMobilitiPlugType(evse.plugType),
+          power: evse.power / 1000,
+          currentType: evse.currentType,
+        },
+      ];
+
+      return {
+        id: d.id,
+        evseId: evse.evseId || evse.uid || `${d.id}-${evse.plugType}-${evse.power / 1000}`,
+        status: 'UNKNOWN',
+        maxPowerKw: evse.power / 1000,
+        plugTypes: [mapMobilitiPlugType(evse.plugType)],
+        connectors: connectors,
+      };
+    });
+
+    // Calculate max power and unique plug types
+    const maxPowerKw = Math.max(...chargePoints.map((cp) => cp.maxPowerKw), 0);
+    const plugTypes = Array.from(new Set(chargePoints.flatMap((cp) => cp.plugTypes)));
+
+    return {
+      id: d.id,
+      countryCode: 'HU',
+      partyId: d.operator.name ?? '',
+      locationId: d.id,
+      fullAddress: d.address,
+      name: d.name,
+      coordinates: [Number(d.latitude), Number(d.longitude)],
+      operatorName: d.operator.name ?? '',
+      chargePoints: chargePoints,
+      plugTypes: plugTypes,
+      maxPowerKw: maxPowerKw,
+      isFavorite: favorites.has(d.id),
+      hasNotificationTurnedOn: false,
+    };
+  });
+}
+
+function mapMobilitiPlugType(mobilitiPlugType: string): PlugType {
+  const plugTypeMap: Record<string, PlugType> = {
+    ccs: PlugType.Ccs,
+    chademo: PlugType.CHAdeMO,
+    type2: PlugType.Type2,
+    'type 2': PlugType.Type2,
+    type_2: PlugType.Type2,
+  };
+
+  return plugTypeMap[mobilitiPlugType.toLowerCase()] || PlugType.Type2;
+}
 
 export function mapDcsDataArrayToChargerViewModelArray(data: DcsPoolDetails[]): ChargerViewModel[] {
   return data.reduce<ChargerViewModel[]>((acc, d) => {

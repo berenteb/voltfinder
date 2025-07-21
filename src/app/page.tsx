@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 
 import { ClientPage } from '@/app/client-page';
 import { metadata as RootMetadata } from '@/app/layout';
-import { getPoolDetails } from '@/common/services/dcs.service';
+import { getMobilitiLocations } from '@/common/services/mobiliti.service';
 import { LoadingScreen } from '@/components/loading-screen';
 
 type Props = {
@@ -18,14 +18,15 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     return RootMetadata;
   }
 
-  const charger = await getPoolDetails([Array.isArray(id) ? id[0] : id]);
+  const chargers = await getMobilitiLocations();
+
+  const charger = chargers.find((c) => c.id === id);
 
   if (!charger) {
     return RootMetadata;
   }
 
-  const location = charger[0].poolLocations[0];
-  const name = location.poolLocationNames?.[0].name ?? '';
+  const name = charger.name;
 
   return {
     ...RootMetadata,

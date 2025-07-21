@@ -6,11 +6,11 @@ import { Button } from '@/components/button';
 import { useChargers } from '@/hooks/use-chargers';
 
 export function LoadingIndicator() {
-  const { chargePointDetailsQuery, chargePointsQuery } = useChargers();
+  const { chargePointsQuery } = useChargers();
 
-  const onRefresh = () => chargePointDetailsQuery.refetch();
+  const onRefresh = () => chargePointsQuery.refetch();
 
-  const isLoading = chargePointsQuery.isFetching || chargePointDetailsQuery.isFetching;
+  const isLoading = chargePointsQuery.isFetching;
 
   return (
     <div className='absolute mx-auto top-5 left-0 right-0 flex justify-center z-10'>
