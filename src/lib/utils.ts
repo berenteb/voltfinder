@@ -1,5 +1,4 @@
 import { sendGAEvent } from '@next/third-parties/google';
-import { Extras } from '@sentry/types';
 import { type ClassValue, clsx } from 'clsx';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -8,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function sendEvent(event: string, extras?: Extras) {
+export function sendEvent(event: string, extras?: Record<string, any>) {
   sendGAEvent('event', event, {
     ...extras,
   });
