@@ -30,7 +30,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
   return {
     ...RootMetadata,
-    title: `${name} | Voltfinder`,
+    title: name,
   };
 }
 
