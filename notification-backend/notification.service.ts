@@ -14,6 +14,7 @@ import { PrismaService } from './prisma.service';
 export class NotificationService {
   private readonly logger = new Logger(NotificationService.name);
   private readonly firebaseApp: App;
+  private readonly subscriptionCache = new Map<string, Subscription[]>();
 
   constructor(private readonly prismaService: PrismaService) {
     this.firebaseApp = initializeApp({
@@ -23,6 +24,7 @@ export class NotificationService {
         privateKey: FIREBASE_PRIVATE_KEY,
       }),
     });
+    this.loadSubscriptionsFromDatabase();
   }
 
   sendNotification(chargerNotificationObject: ChargerNotificationObject): void {
@@ -69,13 +71,7 @@ export class NotificationService {
   }
 
   async getSubscriptionsForStation(stationId: string): Promise<Subscription[]> {
-    const subscriptions = await this.prismaService.subscription.findMany({
-      where: {
-        stationId,
-      },
-    });
-
-    return subscriptions;
+    return this.subscriptionCache.get(stationId) ?? [];
   }
 
   async getAllSubscriptions(): Promise<Subscription[]> {
@@ -91,6 +87,8 @@ export class NotificationService {
         stationId: data.stationId,
       },
     });
+
+    this.addSubscriptionToCache(data.stationId, data.token);
   }
 
   async unsubscribeFromUpdates(data: SubscribeForUpdatesDto) {
@@ -103,9 +101,23 @@ export class NotificationService {
         },
       },
     });
+
+    this.removeSubscriptionFromCache(data.stationId, data.token);
   }
 
   async removeOutdatedSubscriptions(): Promise<void> {
+    const outdatedSubscriptions = await this.prismaService.subscription.findMany({
+      where: {
+        createdAt: {
+          lt: subHours(new Date(), 1),
+        },
+      },
+    });
+
+    for (const subscription of outdatedSubscriptions) {
+      this.removeSubscriptionFromCache(subscription.stationId, subscription.token);
+    }
+
     await this.prismaService.subscription.deleteMany({
       where: {
         createdAt: {
@@ -113,6 +125,33 @@ export class NotificationService {
         },
       },
     });
+  }
+
+  private async loadSubscriptionsFromDatabase(): Promise<void> {
+    const subscriptions = await this.prismaService.subscription.findMany();
+    for (const subscription of subscriptions) {
+      this.addSubscriptionToCache(subscription.stationId, subscription.token);
+    }
+  }
+
+  private addSubscriptionToCache(stationId: string, token: string): void {
+    const existingSubscriptions = this.subscriptionCache.get(stationId);
+    if (existingSubscriptions) {
+      const existingSubscription = existingSubscriptions.find((s) => s.token === token);
+      if (!existingSubscription) {
+        existingSubscriptions.push({ token, stationId, createdAt: new Date() });
+      }
+    } else {
+      this.subscriptionCache.set(stationId, [{ token, stationId, createdAt: new Date() }]);
+    }
+  }
+
+  private removeSubscriptionFromCache(stationId: string, token: string): void {
+    const existingSubscriptions = this.subscriptionCache.get(stationId);
+    if (existingSubscriptions) {
+      const newSubscriptions = existingSubscriptions.filter((s) => s.token !== token);
+      this.subscriptionCache.set(stationId, newSubscriptions);
+    }
   }
 
   private validateDto(data: SubscribeForUpdatesDto): void {

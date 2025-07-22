@@ -3,8 +3,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 import { ApiService } from './api.service';
 import { AppController } from './app.controller';
-import { NotificationService } from './notification.service';
 import { DataRepositoryService } from './data-repository.service';
+import { NotificationService } from './notification.service';
 import { PrismaService } from './prisma.service';
 
 @Module({
