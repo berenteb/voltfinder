@@ -36,9 +36,10 @@ export class DataRepositoryService {
   }
 
   private addNewChargePoints(locations: MobilitiLocationItem[]): void {
-    for (const item of locations) {
-      this.requestQueue.add(() => this.processItem(item));
-    }
+    this.requestQueue.addAll(locations.map((item) => () => this.processItem(item)));
+    this.requestQueue.onEmpty().then(() => {
+      this.logger.log('Queue finished');
+    });
     this.logger.log(`Added ${locations.length} items to the queue`);
   }
 
