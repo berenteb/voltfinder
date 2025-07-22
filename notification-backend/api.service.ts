@@ -3,17 +3,18 @@ import { Injectable, Logger } from '@nestjs/common';
 import { getMobilitiLocationDetails, getMobilitiLocations } from '@/common/services/mobiliti.service';
 import { MobilitiLocationDetails, MobilitiLocationItem, MobilitiLocationResponse } from '@/common/types/mobiliti.types';
 
-import { PrismaService } from './prisma.service';
-
 @Injectable()
 export class ApiService {
   private readonly logger = new Logger(ApiService.name);
 
-  constructor(private readonly prismaService: PrismaService) {}
-
   async getMobilitiChargePointList(): Promise<MobilitiLocationResponse> {
-    const data = await getMobilitiLocations();
-    return data;
+    try {
+      const data = await getMobilitiLocations();
+      return data;
+    } catch (error) {
+      this.logger.error(error);
+      return [];
+    }
   }
 
   async getMobilitiLocationDetails(locationItem: MobilitiLocationItem): Promise<MobilitiLocationDetails | null> {

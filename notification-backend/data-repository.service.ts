@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 
 import { ChargePointViewModel, ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { MobilitiLocationItem } from '@/common/types/mobiliti.types';
@@ -26,7 +26,7 @@ export class DataRepositoryService {
   private async initializeQueue(): Promise<void> {
     try {
       const PQueue = (await import('p-queue')).default;
-      this.requestQueue = new PQueue({ concurrency: 10 });
+      this.requestQueue = new PQueue({ concurrency: 3 });
     } catch (error) {
       this.logger.error('Failed to initialize queue:', error);
       // Fallback to a simple implementation without concurrency control
@@ -42,7 +42,7 @@ export class DataRepositoryService {
     return Array.from(this.cache.values());
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron('*/3 * * * *')
   private async fetchData() {
     this.logger.log('Fetching data');
     const data = await this.dataFetcherService.getMobilitiChargePointList();
@@ -113,8 +113,14 @@ export class DataRepositoryService {
   }
 
   private deleteNonExistingChargePoints(locations: MobilitiLocationItem[]): void {
-    for (const location of locations) {
-      this.delete(location.id);
+    if (locations.length === 0) {
+      return;
+    }
+    const existingKeys = Array.from(this.cache.keys());
+    for (const key of existingKeys) {
+      if (!locations.some((location) => location.id === key)) {
+        this.delete(key);
+      }
     }
   }
 
