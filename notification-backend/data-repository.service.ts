@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import PQueue from 'p-queue';
 
 import { ChargePointViewModel, ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { MobilitiLocationItem } from '@/common/types/mobiliti.types';
@@ -11,7 +12,7 @@ import { NotificationService } from './notification.service';
 @Injectable()
 export class DataRepositoryService {
   private readonly logger = new Logger(DataRepositoryService.name);
-  private requestQueue: any = null;
+  private requestQueue = new PQueue({ concurrency: 3 });
 
   private readonly cache: Map<string, ChargerViewModel> = new Map();
 
@@ -19,23 +20,7 @@ export class DataRepositoryService {
     private readonly dataFetcherService: ApiService,
     private readonly notificationService: NotificationService
   ) {
-    this.initializeQueue();
     this.fetchData();
-  }
-
-  private async initializeQueue(): Promise<void> {
-    try {
-      const PQueue = (await import('p-queue')).default;
-      this.requestQueue = new PQueue({ concurrency: 3 });
-    } catch (error) {
-      this.logger.error('Failed to initialize queue:', error);
-      // Fallback to a simple implementation without concurrency control
-      this.requestQueue = {
-        add: async (task: () => Promise<void>) => await task(),
-        on: () => {},
-        start: () => {},
-      };
-    }
   }
 
   async getData(): Promise<ChargerViewModel[]> {
