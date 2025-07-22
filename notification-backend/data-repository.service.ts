@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import Queue from 'queue';
 
 import { ChargePointViewModel, ChargerViewModel } from '@/common/types/charger-view-model.types';
 import { MobilitiLocationItem } from '@/common/types/mobiliti.types';
@@ -8,11 +7,14 @@ import { MobilitiLocationItem } from '@/common/types/mobiliti.types';
 import { ApiService } from './api.service';
 import { mapMobilitiDataToChargerViewModel } from './charger.utils';
 import { NotificationService } from './notification.service';
+import { ConcurrentQueue } from './queue.utils';
 
 @Injectable()
 export class DataRepositoryService {
   private readonly logger = new Logger(DataRepositoryService.name);
-  private requestQueue = new Queue({ concurrency: 3 });
+  private requestQueue = new ConcurrentQueue(3, () => {
+    this.logger.log('Queue finished');
+  });
 
   private readonly cache: Map<string, ChargerViewModel> = new Map();
 
@@ -36,14 +38,9 @@ export class DataRepositoryService {
   }
 
   private addNewChargePoints(locations: MobilitiLocationItem[]): void {
-    this.requestQueue.push(...locations.map((item) => () => this.processItem(item)));
-    this.requestQueue.start((err) => {
-      if (err) {
-        this.logger.error('Error starting queue', err);
-      } else {
-        this.logger.log('Queue finished');
-      }
-    });
+    for (const item of locations) {
+      this.requestQueue.add(() => this.processItem(item));
+    }
     this.logger.log(`Added ${locations.length} items to the queue`);
   }
 
